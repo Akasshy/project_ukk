@@ -19,21 +19,6 @@ class AdminController extends Controller
 
     public function adduser(Request $request)
     {
-        // $validatedData = $request->validate([
-        //     'full_name' => 'required|string|max:64',
-        //     'username' => 'required|string|max:64|unique:users',
-        //     'email' => 'required|email|unique:users',
-        //     'password' => 'required|string|min:6',
-        //     'role' => 'required|in:student,assessor',
-        //     // Validasi tambahan untuk student
-        //     'nisn' => 'nullable|required_if:role,student|digits:10|unique:students',
-        //     'grade_level' => 'nullable|required_if:role,student|integer|min:1',
-        //     'major_id' => 'nullable|required_if:role,student|exists:majors,id',
-        //     // Validasi tambahan untuk assessor
-        //     'assessor_type' => 'nullable|required_if:role,assessor|in:internal,external',
-        //     'description' => 'nullable|required_if:role,assessor|string',
-        // ]);
-
         // Buat user
         $user = User::create([
             'full_name' => $request->full_name,
@@ -88,6 +73,84 @@ class AdminController extends Controller
         return view('template/template', compact('username'));
     }
 
+    public function addmajors(Request $request){
+        Major::create([
+            'major_name' => $request->major_name,
+            'description' => $request->description
+        ]);
+        return redirect('/majors')->with('success','');
+    }
+
+    public function deleteuser(Request $request){
+        User::where('id', $request->id)->delete();
+        return redirect('/users')->with('success','');
+    }
+
+    public function editUser($id)
+    {
+        $user = User::where('id',$id)->first();
+        $majors = Major::all(); // Jika ada major untuk student
+        return view('admin/users/edituser', compact('user', 'majors'));
+    }
+
+    public function updateUser(Request $request, $id)
+    {
+        $user = User::findOrFail($id);
+
+        // Validasi umum
+        $request->validate([
+            'full_name' => 'required|string|max:255',
+            'username' => 'required|string|max:255|unique:users,username,' . $user->id,
+            'email' => 'required|email|max:255|unique:users,email,' . $user->id,
+            'phone_number' => 'required|string|max:15',
+            'role' => 'required|in:admin,student,assessor',
+        ]);
+
+        // Validasi tambahan berdasarkan role
+        if ($request->role === 'student') {
+            $request->validate([
+                'nisn' => 'required|string|max:10|unique:students,nisn,' . ($user->student->id ?? null),
+                'grade_level' => 'required|integer|in:10,11,12',
+                'major_id' => 'required|exists:majors,id',
+            ]);
+        } elseif ($request->role === 'assessor') {
+            $request->validate([
+                'assessor_type' => 'required|in:internal,external',
+                'description' => 'nullable|string|max:255',
+            ]);
+        }
+
+        // Update data user
+        $user->update([
+            'full_name' => $request->full_name,
+            'username' => $request->username,
+            'email' => $request->email,
+            'phone_number' => $request->phone_number,
+            'role' => $request->role,
+        ]);
+
+        // Update data role-specific
+        if ($request->role === 'student') {
+            $user->student()->updateOrCreate([], [
+                'nisn' => $request->nisn,
+                'grade_level' => $request->grade_level,
+                'major_id' => $request->major_id,
+            ]);
+        } elseif ($request->role === 'assessor') {
+            $user->assessor()->updateOrCreate([], [
+                'assessor_type' => $request->assessor_type,
+                'description' => $request->description,
+            ]);
+        } else {
+            // Hapus data role sebelumnya jika role tidak memerlukan data tambahan
+            $user->student()->delete();
+            $user->assessor()->delete();
+        }
+
+        return redirect('/users')->with('success', 'User updated successfully!');
+    }
+
+    //majors
     public function majors(){
         $majors['majors'] = Major::all();
         return view('admin/majors/majors',$majors,);
@@ -95,11 +158,35 @@ class AdminController extends Controller
     public function viewaddmajors(){
         return view('admin/majors/addmajors');
     }
-    public function addmajors(Request $request){
-        Major::create([
-            'major_name' => $request->major_name,
-            'description' => $request->description
-        ]);
+
+    public function deletemj(Request $request){
+        Major::where('id',$request->id)->delete();
         return redirect('/majors')->with('success','');
+    }
+
+    public function edit($id)
+    {
+        $major = Major::findOrFail($id);
+        return view('admin/majors/editmajors', compact('major'));
+    }
+
+    // Update data major
+    public function update(Request $request, $id)
+    {
+        $major = Major::findOrFail($id);
+
+        // Validasi data
+        $request->validate([
+            'major_name' => 'required|string|max:255',
+            'description' => 'nullable|string|max:1000',
+        ]);
+
+        // Update data
+        $major->update([
+            'major_name' => $request->major_name,
+            'description' => $request->description,
+        ]);
+
+        return redirect('/majors')->with('success', 'Major updated successfully!');
     }
 }

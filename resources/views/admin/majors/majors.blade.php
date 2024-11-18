@@ -63,12 +63,12 @@
                       <td>{{$item->description}}</td>
                       <td>
                         <div class="form-button-action">
-                          <button class="btn btn-link btn-primary btn-lg">
+                          <a href="/majors/edit/{{$item->id}}" class="btn btn-link btn-primary btn-lg">
                             <i class="fa fa-edit"></i>
-                          </button>
-                          <button class="btn btn-link btn-danger">
+                          </a>
+                          <a class="btn btn-link btn-danger" href="/deletemj/{{$item->id}}" onclick="return confirm('yakin delete?')">
                             <i class="fa fa-times"></i>
-                          </button>
+                          </a>
                         </div>
                       </td>
                     </tr>
@@ -117,11 +117,11 @@
 
         $('#addRowButton').click(function () {
           var action = `
-            <td> 
-              <div class="form-button-action"> 
+            <td>
+              <div class="form-button-action">
                 <button class="btn btn-link btn-primary btn-lg"><i class="fa fa-edit"></i></button>
                 <button class="btn btn-link btn-danger"><i class="fa fa-times"></i></button>
-              </div> 
+              </div>
             </td>`;
           $('#add-row').DataTable().row.add([
             $('#addName').val(),
