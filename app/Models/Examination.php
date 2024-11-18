@@ -19,8 +19,8 @@ class Examination extends Model
         return $this->belongsTo(Assessor::class);
     }
 
-    public function element()
+    public function competencyElement()
     {
-        return $this->belongsTo(Competency_Element::class);
+        return $this->belongsTo(CompetencyElement::class, 'element_id');
     }
 }

@@ -97,54 +97,47 @@ class AdminController extends Controller
     {
         $user = User::findOrFail($id);
 
-        // Validasi umum
+        // Validasi input
         $request->validate([
             'full_name' => 'required|string|max:255',
-            'username' => 'required|string|max:255|unique:users,username,' . $user->id,
-            'email' => 'required|email|max:255|unique:users,email,' . $user->id,
-            'phone_number' => 'required|string|max:15',
+            'username' => 'required|string|max:255|unique:users,username,' . $id,
+            'email' => 'required|email|max:255|unique:users,email,' . $id,
+            'phone_number' => 'required|string|max:20',
+            'password' => 'nullable|string|min:8|confirmed', // Password optional
             'role' => 'required|in:admin,student,assessor',
+            'nisn' => 'nullable|string|max:20', // Untuk student
+            'grade_level' => 'nullable|in:10,11,12',
+            'major_id' => 'nullable|exists:majors,id',
+            'assessor_type' => 'nullable|in:internal,external', // Untuk assessor
+            'description' => 'nullable|string|max:1000',
         ]);
 
-        // Validasi tambahan berdasarkan role
-        if ($request->role === 'student') {
-            $request->validate([
-                'nisn' => 'required|string|max:10|unique:students,nisn,' . ($user->student->id ?? null),
-                'grade_level' => 'required|integer|in:10,11,12',
-                'major_id' => 'required|exists:majors,id',
-            ]);
-        } elseif ($request->role === 'assessor') {
-            $request->validate([
-                'assessor_type' => 'required|in:internal,external',
-                'description' => 'nullable|string|max:255',
-            ]);
-        }
-
-        // Update data user
+        // Update data umum
         $user->update([
             'full_name' => $request->full_name,
             'username' => $request->username,
             'email' => $request->email,
             'phone_number' => $request->phone_number,
             'role' => $request->role,
+            // Hanya ubah password jika diisi
+            'password' => $request->password ? bcrypt($request->password) : $user->password,
         ]);
 
-        // Update data role-specific
+        // Update data student (jika role student)
         if ($request->role === 'student') {
-            $user->student()->updateOrCreate([], [
+            $user->student()->update( [
                 'nisn' => $request->nisn,
                 'grade_level' => $request->grade_level,
                 'major_id' => $request->major_id,
             ]);
-        } elseif ($request->role === 'assessor') {
-            $user->assessor()->updateOrCreate([], [
+        }
+
+        // Update data assessor (jika role assessor)
+        if ($request->role === 'assessor') {
+            $user->assessor()->update( [
                 'assessor_type' => $request->assessor_type,
                 'description' => $request->description,
             ]);
-        } else {
-            // Hapus data role sebelumnya jika role tidak memerlukan data tambahan
-            $user->student()->delete();
-            $user->assessor()->delete();
         }
 
         return redirect('/users')->with('success', 'User updated successfully!');
@@ -190,3 +183,4 @@ class AdminController extends Controller
         return redirect('/majors')->with('success', 'Major updated successfully!');
     }
 }
+

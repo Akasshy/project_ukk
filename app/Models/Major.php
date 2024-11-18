@@ -9,13 +9,15 @@ class Major extends Model
 {
     use HasFactory;
     protected $guarded = [];
+    protected $fillable = ['major_name', 'description'];
+
     public function students()
     {
         return $this->hasMany(Student::class);
     }
 
-    public function competencies()
+    public function competencyStandards()
     {
-        return $this->hasMany(Competency_Standar::class);
+        return $this->hasMany(CompetencyStandar::class);
     }
 }

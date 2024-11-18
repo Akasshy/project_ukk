@@ -17,10 +17,9 @@ class AuthController extends Controller
         if (Auth::attempt($validatedData)) {
             $user = Auth::user();
             if ($user->role == 'admin') {
-                $userName = Auth::user()->full_name;
                 return redirect('/dasboard');
-            } elseif ($user->role == 'assesor') {
-                return redirect('/assesor-page');
+            } elseif ($user->role == 'assessor') {
+                return redirect('/vaddst');
             } else {
                 return redirect('/student-page');
             }
@@ -32,7 +31,6 @@ class AuthController extends Controller
     }
     public function logout(Request $request){
 
-        $request->session()->flush();
         Auth::logout();
         return redirect('/login');
     }

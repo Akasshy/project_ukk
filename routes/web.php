@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\AssessorController;
 use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Route;
 
@@ -21,6 +22,12 @@ Route::get('/', function () {
 Route::get('/dasboard', function () {
     return view('admin/admin-dasboard');
 });
+// Route::get('/tes', function () {
+//     return view('assessor/standar/addstandar');
+// });
+// Route::get('/standar', function () {
+//     return view('assessor/standar/standarkom');
+// });
 // Route::get('/coba', function () {
 //     return view('admin/adduser');
 // });
@@ -41,7 +48,6 @@ Route::post('/add/user',[AdminController::class,'adduser']);
 
 Route::get('/veditus/{id}', [AdminController::class, 'editUser']);
 Route::post('/user/{id}/update', [AdminController::class, 'updateUser']);
-
 Route::get('/user/delete/{id}',[AdminController::class,'deleteuser']);
 
 //majors
@@ -52,3 +58,8 @@ Route::post('/add/majors',[AdminController::class,'addmajors']);
 Route::get('/majors/edit/{id}', [AdminController::class, 'edit']);
 Route::put('/majors/{id}/update', [AdminController::class, 'update']);
 Route::get('/logout',[AuthController::class,'logout']);
+
+//ASSESOR
+Route::get('/standars',[AssessorController::class,'standars']);
+Route::get('/vaddst',[AssessorController::class,'vaddst']);
+Route::post('/addst',[AssessorController::class,'addst']);

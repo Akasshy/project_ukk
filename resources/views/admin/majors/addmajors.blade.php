@@ -36,9 +36,10 @@
                 <textarea name="description" id="description" placeholder="Enter description" class="form-control"></textarea>
               </div>
               <input type="submit" class="btn btn-primary" value="Simpan">
+              <a href="/majors" class="btn btn-danger">Cancel</a>
             </div>
         </form>
     </div>
 </div>
-     
+
 @endsection

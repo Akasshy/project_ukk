@@ -14,9 +14,9 @@ class Assessor extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function competencies()
+    public function competencyStandards()
     {
-        return $this->hasMany(Competency_Standar::class);
+        return $this->hasMany(CompetencyStandar::class);
     }
 
     public function examinations()

@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('nisn', 10)->unique();
             $table->integer('grade_level');
-            $table->foreignId('major_id')->constrained()->onDelete('cascade');
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->foreignId('major_id')->constrained('majors')->onDelete('cascade');
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->timestamps();
         });
     }

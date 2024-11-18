@@ -1,4 +1,4 @@
-@extends('template.template')
+@extends('template.templateassessor')
 @section('content')
 <link rel="stylesheet" href="{{ asset('assets/css/custom.css') }}">
 <link rel="stylesheet" href="{{ asset('assets/css/bootstrap.min.css') }}" />
@@ -19,13 +19,13 @@
           <i class="icon-arrow-right"></i>
         </li>
         <li class="nav-item">
-          <a href="#">Users</a>
+          <a href="#">Assessor</a>
         </li>
         <li class="separator">
           <i class="icon-arrow-right"></i>
         </li>
         <li class="nav-item">
-          <a href="">All User</a>
+          <a href="">Standar Kompetensi</a>
         </li>
       </ul>
     </div>
@@ -34,9 +34,9 @@
         <div class="card">
           <div class="card-header">
             <div class="d-flex align-items-center">
-                <h4 class="card-title me-auto">Data Students</h4>
-                <a type="button" class="btn btn-primary ms-auto" href="/vaddus">
-                    Add Student
+                <h4 class="card-title me-auto">Standar Kompetensi</h4>
+                <a type="button" class="btn btn-primary ms-auto" href="/vaddst">
+                    Add standar
                 </a>
             </div>
           </div>
@@ -44,38 +44,41 @@
               <table id="add-row" class="display table table-striped table-hover">
                 <thead>
                   <tr>
-                    <th>Nama</th>
-                    <th>Nisn</th>
-                    <th>Grade Lvl/Kelas</th>
+                    <th>Unit Code</th>
+                    <th>Unit Title</th>
+                    <th>Unit Description</th>
                     <th>Major</th>
+                    <th>Assessor</th>
                     <th style="width: 10%">Action</th>
                   </tr>
                 </thead>
                 <tfoot>
                   <tr>
-                    <th>Nama</th>
-                    <th>Nisn</th>
-                    <th>Grade Lvl/Kelas</th>
+                    <th>Unit Code</th>
+                    <th>Unit Title</th>
+                    <th>Unit Description</th>
                     <th>Major</th>
+                    <th>Assessor</th>
                     <th>Action</th>
                   </tr>
                 </tfoot>
                 <tbody>
-                    @foreach ($users as $key => $item)
+                    @foreach ($standars as $key => $item)
                     <tr>
-                      <td>{{$item->user->full_name}}</td>
-                      <td>{{$item->nisn}}</td>
-                      <td>{{$item->grade_level}}</td>
+                      <td>{{$item->unit_code}}</td>
+                      <td>{{$item->unit_title}}</td>
+                      <td>{{$item->unit_description}}</td>
                       <td>{{$item->major->major_name}}</td>
+                      <td>{{$item->assessor->user->full_name}}</td>
                       <td>
                         <div class="form-button-action">
-                            <a href="/veditus/{{$item->user->id}}" class="btn btn-link btn-primary btn-lg">
-                              <i class="fa fa-edit"></i>
-                            </a>
-                            <a href="/user/delete/{{$item->user->id}}" onclick="return confirm('yakin delete?')" class="btn btn-link btn-danger">
-                              <i class="fa fa-times"></i>
-                            </a>
-                          </div>
+                          <a href="/veditus/{{$item->id}}" class="btn btn-link btn-primary btn-lg">
+                            <i class="fa fa-edit"></i>
+                          </a>
+                          <a class="btn btn-link btn-danger" onclick="return confirm('yakin hapus?')" href="/user/delete/{{$item->id}}">
+                            <i class="fa fa-times"></i>
+                          </a>
+                        </div>
                       </td>
                     </tr>
                     @endforeach

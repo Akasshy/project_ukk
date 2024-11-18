@@ -34,7 +34,7 @@
         <div class="card">
           <div class="card-header">
             <div class="d-flex align-items-center">
-                <h4 class="card-title me-auto">Users</h4>
+                <h4 class="card-title me-auto">Data Admin</h4>
                 <a href="/vaddus" type="button" class="btn btn-primary ms-auto" >
                     Add Admin
                 </a>
@@ -54,7 +54,7 @@
                   </tr>
                 </thead>
                 <tfoot>
-                   
+
                   <tr>
                     <th>Full Name</th>
                     <th>Username</th>
@@ -74,16 +74,16 @@
                       <td>{{$item->phone_number}}</td>
                       <td>{{$item->role}}</td>
                       <td>{{$item->is_active}}</td>
-                
+
                       <td>
                         <div class="form-button-action">
-                          <button class="btn btn-link btn-primary btn-lg">
-                            <i class="fa fa-edit"></i>
-                          </button>
-                          <button class="btn btn-link btn-danger">
-                            <i class="fa fa-times"></i>
-                          </button>
-                        </div>
+                            <a href="/veditus/{{$item->id}}" class="btn btn-link btn-primary btn-lg">
+                              <i class="fa fa-edit"></i>
+                            </a>
+                            <a href="/user/delete/{{$item->id}}" onclick="return confirm('yakin delete?')" class="btn btn-link btn-danger">
+                              <i class="fa fa-times"></i>
+                            </a>
+                          </div>
                       </td>
                     </tr>
                     @endforeach
@@ -132,11 +132,11 @@
 
         $('#addRowButton').click(function () {
           var action = `
-            <td> 
-              <div class="form-button-action"> 
+            <td>
+              <div class="form-button-action">
                 <button class="btn btn-link btn-primary btn-lg"><i class="fa fa-edit"></i></button>
                 <button class="btn btn-link btn-danger"><i class="fa fa-times"></i></button>
-              </div> 
+              </div>
             </td>`;
           $('#add-row').DataTable().row.add([
             $('#addName').val(),

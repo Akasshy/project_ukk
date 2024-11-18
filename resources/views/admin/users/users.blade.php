@@ -54,7 +54,7 @@
                   </tr>
                 </thead>
                 <tfoot>
-                   
+
                   <tr>
                     <th>Full Name</th>
                     <th>Username</th>
@@ -74,13 +74,13 @@
                       <td>{{$item->phone_number}}</td>
                       <td>{{$item->role}}</td>
                       <td>{{$item->is_active}}</td>
-                
+
                       <td>
                         <div class="form-button-action">
                           <a href="/veditus/{{$item->id}}" class="btn btn-link btn-primary btn-lg">
                             <i class="fa fa-edit"></i>
                           </a>
-                          <a href="/user/delete/{{$item->id}}" class="btn btn-link btn-danger">
+                          <a href="/user/delete/{{$item->id}}" onclick="return confirm('yakin delete?')" class="btn btn-link btn-danger">
                             <i class="fa fa-times"></i>
                           </a>
                         </div>
@@ -95,26 +95,6 @@
       </div>
     </div>
 </div>
-<script>
-  document.getElementById('role').addEventListener('change', function () {
-      const role = this.value;
-
-      // Referensi ke div input tambahan
-      const studentFields = document.getElementById('student-fields');
-      const assessorFields = document.getElementById('assessor-fields');
-
-      // Reset semua input tambahan
-      studentFields.style.display = 'none';
-      assessorFields.style.display = 'none';
-
-      // Tampilkan input tambahan berdasarkan role
-      if (role === 'student') {
-          studentFields.style.display = 'block';
-      } else if (role === 'assessor') {
-          assessorFields.style.display = 'block';
-      }
-  });
-</script>
 
 <script src="{{ asset('assets/js/plugin/webfont/webfont.min.js') }}"></script>
     <script>
@@ -151,11 +131,11 @@
 
         $('#addRowButton').click(function () {
           var action = `
-            <td> 
-              <div class="form-button-action"> 
+            <td>
+              <div class="form-button-action">
                 <button class="btn btn-link btn-primary btn-lg"><i class="fa fa-edit"></i></button>
                 <button class="btn btn-link btn-danger"><i class="fa fa-times"></i></button>
-              </div> 
+              </div>
             </td>`;
           $('#add-row').DataTable().row.add([
             $('#addName').val(),

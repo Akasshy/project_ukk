@@ -3,6 +3,8 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+
+use App\Models\Major;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 
@@ -26,6 +28,11 @@ class DatabaseSeeder extends Seeder
             'password'=> bcrypt('1234'),
             'phone_number'=> '0823323',
             'role'=> 'admin',
+        ]);
+
+        Major::create([
+            'major_name' => 'RPL',
+            'description' => 'REKAYASA PERANGKAT LUNAK'
         ]);
     }
 }

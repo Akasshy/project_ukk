@@ -34,11 +34,11 @@
         <div class="card">
           <div class="card-header">
             <div class="d-flex align-items-center">
-                <h4 class="card-title me-auto">Users</h4>
+                <h4 class="card-title me-auto">Data Assessors</h4>
                 <a type="button" class="btn btn-primary ms-auto" href="/vaddus">
                     Add Assessor
                 </a>
-                
+
             </div>
           </div>
             <div class="table-responsive pt-3">
@@ -67,13 +67,13 @@
                       <td>{{$item->description}}</td>
                       <td>
                         <div class="form-button-action">
-                          <button class="btn btn-link btn-primary btn-lg">
-                            <i class="fa fa-edit"></i>
-                          </button>
-                          <button class="btn btn-link btn-danger">
-                            <i class="fa fa-times"></i>
-                          </button>
-                        </div>
+                            <a href="/veditus/{{$item->user->id}}" class="btn btn-link btn-primary btn-lg">
+                              <i class="fa fa-edit"></i>
+                            </a>
+                            <a href="/user/delete/{{$item->user->id}}" onclick="return confirm('yakin delete?')" class="btn btn-link btn-danger">
+                              <i class="fa fa-times"></i>
+                            </a>
+                          </div>
                       </td>
                     </tr>
                     @endforeach
@@ -121,11 +121,11 @@
 
         $('#addRowButton').click(function () {
           var action = `
-            <td> 
-              <div class="form-button-action"> 
+            <td>
+              <div class="form-button-action">
                 <button class="btn btn-link btn-primary btn-lg"><i class="fa fa-edit"></i></button>
                 <button class="btn btn-link btn-danger"><i class="fa fa-times"></i></button>
-              </div> 
+              </div>
             </td>`;
           $('#add-row').DataTable().row.add([
             $('#addName').val(),

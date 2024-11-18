@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Competency_Standar extends Model
+class CompetencyStandar extends Model
 {
     use HasFactory;
     protected $guarded = [];
@@ -19,8 +19,9 @@ class Competency_Standar extends Model
         return $this->belongsTo(Assessor::class);
     }
 
-    public function elements()
+    public function competencyElements()
     {
-        return $this->hasMany(Competency_Element::class);
+        return $this->hasMany(CompetencyElement::class);
     }
+
 }

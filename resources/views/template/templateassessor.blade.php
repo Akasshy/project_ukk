@@ -75,9 +75,9 @@
                 <li class="nav-item active">
                   <a
                     data-bs-toggle="collapse"
+                    href="/dasboard/assessor"
                     class="collapsed"
                     aria-expanded="false"
-                    href="/dasboard"
                   >
                     <i class="fas fa-home"></i>
                     <p>Dashboard</p>
@@ -85,55 +85,26 @@
 
                 </li>
                 <li class="nav-item">
-                  <a data-bs-toggle="collapse" href="#base">
-                    <i class="fas fa-address-card"></i>
-                    <p>User Management</p>
-                    <span class="caret"></span>
+                  <a href="/standars">
+                    <i class="fas fa-box-open"></i>
+                    <p>Standar Kompetensi</p>
                   </a>
-                  <div class="collapse" id="base">
-                    <ul class="nav nav-collapse">
-                      <li>
-                        <a href="/users">
-                          <span class="sub-item">All User</span>
-                        </a>
-                      </li>
-                      <li>
-                        <a href="/dtadmin">
-                          <span class="sub-item">Admin</span>
-                        </a>
-                      </li>
-                      <li>
-                        <a href="/dtassesor">
-                          <span class="sub-item">Assesor</span>
-                        </a>
-                      </li>
-                      <li>
-                        <a href="/dtstudent">
-                          <span class="sub-item">Student</span>
-                        </a>
-                      </li>
-                    </ul>
-                  </div>
                 </li>
                 <li class="nav-item">
-                  <a data-bs-toggle="collapse" href="#forms">
-                    <i class="fas fa-pen-square"></i>
-                    <p>Majors Management</p>
-                    <span class="caret"></span>
+                  <a href="/element">
+                    <i class="fas fa-boxes"></i>
+                    <p>Elemen Kompetensi</p>
                   </a>
-                  <div class="collapse" id="forms">
-                    <ul class="nav nav-collapse">
-                      <li>
-                        <a href="majors">
-                          <span class="sub-item">Kelola Majors</span>
-                        </a>
-                      </li>
-                    </ul>
-                  </div>
+                </li>
+                <li class="nav-item">
+                  <a data-bs-toggle="collapse" href="/penilaian">
+                    <i class="fas fa-pen-square"></i>
+                    <p>Penilaian ujian </p>
+                  </a>
                 </li>
                 <li class="nav-item">
                   <a data-bs-toggle="collapse" href="#laporan">
-                    <i class="fas fa-pen-square"></i>
+                    <i class="fas fa-calendar"></i>
                     <p>Laporan</p>
                     <span class="caret"></span>
                   </a>
@@ -142,6 +113,11 @@
                       <li>
                         <a href="forms/forms.html">
                           <span class="sub-item">Hasil Ujian</span>
+                        </a>
+                      </li>
+                      <li>
+                        <a href="forms/forms.html">
+                          <span class="sub-item">Laporan Hasil Ujian</span>
                         </a>
                       </li>
                     </ul>
@@ -222,7 +198,7 @@
                     </div>
                     <span class="profile-username">
                       <span class="op-7">Hi,</span>
-                      <span class="fw-bold">{{Auth::user()->full_name}}</span>
+                      {{-- <span class="fw-bold">{{Auth::user()->full_name}}</span> --}}
                     </span>
                   </a>
                   <ul class="dropdown-menu dropdown-user animated fadeIn">
@@ -237,8 +213,8 @@
                             />
                           </div>
                           <div class="u-text">
-                            <h4>{{Auth::user()->full_name}}</h4>
-                            <p class="text-muted">{{Auth::user()->email}}</p>
+                            {{-- <h4>{{Auth::user()->full_name}}</h4>
+                            <p class="text-muted">{{Auth::user()->email}}</p> --}}
                             <a
                               href="profile.html"
                               class="btn btn-xs btn-secondary btn-sm"
@@ -269,198 +245,7 @@
     </div>
 
       <!-- Custom template | don't include it in your project! -->
-      <div class="custom-template">
-        <div class="title">Settings</div>
-        <div class="custom-content">
-          <div class="switcher">
-            <div class="switch-block">
-              <h4>Logo Header</h4>
-              <div class="btnSwitch">
-                <button
-                  type="button"
-                  class="selected changeLogoHeaderColor"
-                  data-color="dark"
-                ></button>
-                <button
-                  type="button"
-                  class="changeLogoHeaderColor"
-                  data-color="blue"
-                ></button>
-                <button
-                  type="button"
-                  class="changeLogoHeaderColor"
-                  data-color="purple"
-                ></button>
-                <button
-                  type="button"
-                  class="changeLogoHeaderColor"
-                  data-color="light-blue"
-                ></button>
-                <button
-                  type="button"
-                  class="changeLogoHeaderColor"
-                  data-color="green"
-                ></button>
-                <button
-                  type="button"
-                  class="changeLogoHeaderColor"
-                  data-color="orange"
-                ></button>
-                <button
-                  type="button"
-                  class="changeLogoHeaderColor"
-                  data-color="red"
-                ></button>
-                <button
-                  type="button"
-                  class="changeLogoHeaderColor"
-                  data-color="white"
-                ></button>
-                <br />
-                <button
-                  type="button"
-                  class="changeLogoHeaderColor"
-                  data-color="dark2"
-                ></button>
-                <button
-                  type="button"
-                  class="changeLogoHeaderColor"
-                  data-color="blue2"
-                ></button>
-                <button
-                  type="button"
-                  class="changeLogoHeaderColor"
-                  data-color="purple2"
-                ></button>
-                <button
-                  type="button"
-                  class="changeLogoHeaderColor"
-                  data-color="light-blue2"
-                ></button>
-                <button
-                  type="button"
-                  class="changeLogoHeaderColor"
-                  data-color="green2"
-                ></button>
-                <button
-                  type="button"
-                  class="changeLogoHeaderColor"
-                  data-color="orange2"
-                ></button>
-                <button
-                  type="button"
-                  class="changeLogoHeaderColor"
-                  data-color="red2"
-                ></button>
-              </div>
-            </div>
-            <div class="switch-block">
-              <h4>Navbar Header</h4>
-              <div class="btnSwitch">
-                <button
-                  type="button"
-                  class="changeTopBarColor"
-                  data-color="dark"
-                ></button>
-                <button
-                  type="button"
-                  class="changeTopBarColor"
-                  data-color="blue"
-                ></button>
-                <button
-                  type="button"
-                  class="changeTopBarColor"
-                  data-color="purple"
-                ></button>
-                <button
-                  type="button"
-                  class="changeTopBarColor"
-                  data-color="light-blue"
-                ></button>
-                <button
-                  type="button"
-                  class="changeTopBarColor"
-                  data-color="green"
-                ></button>
-                <button
-                  type="button"
-                  class="changeTopBarColor"
-                  data-color="orange"
-                ></button>
-                <button
-                  type="button"
-                  class="changeTopBarColor"
-                  data-color="red"
-                ></button>
-                <button
-                  type="button"
-                  class="selected changeTopBarColor"
-                  data-color="white"
-                ></button>
-                <br />
-                <button
-                  type="button"
-                  class="changeTopBarColor"
-                  data-color="dark2"
-                ></button>
-                <button
-                  type="button"
-                  class="changeTopBarColor"
-                  data-color="blue2"
-                ></button>
-                <button
-                  type="button"
-                  class="changeTopBarColor"
-                  data-color="purple2"
-                ></button>
-                <button
-                  type="button"
-                  class="changeTopBarColor"
-                  data-color="light-blue2"
-                ></button>
-                <button
-                  type="button"
-                  class="changeTopBarColor"
-                  data-color="green2"
-                ></button>
-                <button
-                  type="button"
-                  class="changeTopBarColor"
-                  data-color="orange2"
-                ></button>
-                <button
-                  type="button"
-                  class="changeTopBarColor"
-                  data-color="red2"
-                ></button>
-              </div>
-            </div>
-            <div class="switch-block">
-              <h4>Sidebar</h4>
-              <div class="btnSwitch">
-                <button
-                  type="button"
-                  class="changeSideBarColor"
-                  data-color="white"
-                ></button>
-                <button
-                  type="button"
-                  class="selected changeSideBarColor"
-                  data-color="dark"
-                ></button>
-                <button
-                  type="button"
-                  class="changeSideBarColor"
-                  data-color="dark2"
-                ></button>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="custom-toggle">
-          <i class="icon-settings"></i>
-        </div>
-      </div>
+
       <!-- End Custom template -->
     </div>
     <!--   Core JS Files   -->

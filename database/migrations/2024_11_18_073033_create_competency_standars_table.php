@@ -9,14 +9,14 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up()
+    public function up(): void
     {
-        Schema::create('competency_standard', function (Blueprint $table) {
+        Schema::create('competency_standars', function (Blueprint $table) {
             $table->id();
             $table->string('unit_code', 32);
             $table->string('unit_title', 64);
             $table->longText('unit_description')->nullable();
-            $table->foreignId('major_id')->constrained()->onDelete('cascade');
+            $table->foreignId('major_id')->constrained('majors')->onDelete('cascade');
             $table->foreignId('assessor_id')->constrained('assessors')->onDelete('cascade');
             $table->timestamps();
         });
@@ -27,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('competency__standars');
+        Schema::dropIfExists('competency_standars');
     }
 };

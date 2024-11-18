@@ -9,7 +9,7 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up()
+    public function up(): void
     {
         Schema::create('examinations', function (Blueprint $table) {
             $table->id();
@@ -17,11 +17,12 @@ return new class extends Migration
             $table->foreignId('student_id')->constrained('students')->onDelete('cascade');
             $table->foreignId('assessor_id')->constrained('assessors')->onDelete('cascade');
             $table->foreignId('element_id')->constrained('competency_elements')->onDelete('cascade');
-            $table->tinyInteger('status');
+            $table->tinyInteger('status')->default(0);
             $table->longText('comments')->nullable();
             $table->timestamps();
         });
     }
+
     /**
      * Reverse the migrations.
      */

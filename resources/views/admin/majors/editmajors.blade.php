@@ -38,6 +38,7 @@
                           placeholder="Enter description">{{ old('description', $major->description) }}</textarea>
             </div>
             <input type="submit" class="btn btn-primary" value="Update">
+            <a href="/majors" class="btn btn-danger">Cancel</a>
         </form>
     </div>
 </div>

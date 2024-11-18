@@ -91,21 +91,22 @@
               </div>
             </div>
             <input type="submit" class="btn btn-primary" value="Simpan">
+            <a href="/users" class="btn btn-danger">Cancel</a>
         </form>
     </div>
 </div>
      <script>
         document.getElementById('role').addEventListener('change', function () {
             const role = this.value;
-      
+
             // Referensi ke div input tambahan
             const studentFields = document.getElementById('student-fields');
             const assessorFields = document.getElementById('assessor-fields');
-      
+
             // Reset semua input tambahan
             studentFields.style.display = 'none';
             assessorFields.style.display = 'none';
-      
+
             // Tampilkan input tambahan berdasarkan role
             if (role === 'student') {
                 studentFields.style.display = 'block';
