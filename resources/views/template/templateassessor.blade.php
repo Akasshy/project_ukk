@@ -9,29 +9,30 @@
     />
     <link
       rel="icon"
-      href="assets/img/kaiadmin/favicon.ico"
+      href="{{ asset('assets/img/kaiadmin/favicon.ico') }}"
       type="image/x-icon"
     />
 
     <!-- Fonts and icons -->
     <script src="{{asset('assets/js/plugin/webfont/webfont.min.js')}}"></script>
     <script>
-      WebFont.load({
-        google: { families: ["Public Sans:300,400,500,600,700"] },
-        custom: {
-          families: [
-            "Font Awesome 5 Solid",
-            "Font Awesome 5 Regular",
-            "Font Awesome 5 Brands",
-            "simple-line-icons",
-          ],
-          urls: ["assets/css/fonts.min.css"],
-        },
-        active: function () {
-          sessionStorage.fonts = true;
-        },
-      });
-    </script>
+        WebFont.load({
+          google: { families: ["Public Sans:300,400,500,600,700"] },
+          custom: {
+            families: [
+              "Font Awesome 5 Solid",
+              "Font Awesome 5 Regular",
+              "Font Awesome 5 Brands",
+              "simple-line-icons",
+            ],
+            urls: ["{{ asset('assets/css/fonts.min.css') }}"],
+          },
+          active: function () {
+            sessionStorage.fonts = true;
+          },
+        });
+      </script>
+
 
     <!-- CSS Files -->
     <link rel="stylesheet" href="{{ asset('assets/css/bootstrap.min.css') }}" />
@@ -91,7 +92,7 @@
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a href="/element">
+                  <a href="/elements">
                     <i class="fas fa-boxes"></i>
                     <p>Elemen Kompetensi</p>
                   </a>
@@ -133,7 +134,7 @@
         <div class="main-header">
           <div class="main-header-logo">
             <!-- Logo Header -->
-            <div class="logo-header " data-background-color="dark">
+            <div class="logo-header " >
               <a href="index.html" class="logo">
                 <img
                   src="{{asset('assets/img/kaiadmin/logo_light.svg')}}"
@@ -157,26 +158,9 @@
             <!-- End Logo Header -->
           </div>
           <!-- Navbar Header -->
-          <nav
-            class="navbar navbar-header navbar-header-transparent navbar-expand-lg border-bottom"
-          >
+          <nav class="navbar navbar-expand-lg border-bottom navbar-white" style="background-color: #1A2035;">
             <div class="container-fluid">
-              <nav
-                class="navbar navbar-header-left navbar-expand-lg navbar-form nav-search p-0 d-none d-lg-flex"
-              >
-                {{-- <div class="input-group">
-                  <div class="input-group-prepend">
-                    <button type="submit" class="btn btn-search pe-1">
-                      <i class="fa fa-search search-icon"></i>
-                    </button>
-                  </div>
-                  <input
-                    type="text"
-                    placeholder="Search ..."
-                    class="form-control"
-                  />
-                </div> --}}
-              </nav>
+
 
               <ul class="navbar-nav topbar-nav ms-md-auto align-items-center">
                 <li class="text-dark">
@@ -197,8 +181,8 @@
                       />
                     </div>
                     <span class="profile-username">
-                      <span class="op-7">Hi,</span>
-                      {{-- <span class="fw-bold">{{Auth::user()->full_name}}</span> --}}
+                      <span class="op-7 text-white">Hi,</span>
+                      <span class="fw-bold text-white">{{Auth::user()->full_name}}</span>
                     </span>
                   </a>
                   <ul class="dropdown-menu dropdown-user animated fadeIn">
@@ -213,8 +197,8 @@
                             />
                           </div>
                           <div class="u-text">
-                            {{-- <h4>{{Auth::user()->full_name}}</h4>
-                            <p class="text-muted">{{Auth::user()->email}}</p> --}}
+                            <h4>{{Auth::user()->full_name}}</h4>
+                            <p class="text-muted">{{Auth::user()->email}}</p>
                             <a
                               href="profile.html"
                               class="btn btn-xs btn-secondary btn-sm"
@@ -269,14 +253,14 @@
     <script src="{{ asset('assets/js/plugin/datatables/datatables.min.js') }}"></script>
 
     <!-- Bootstrap Notify -->
-    <script src="{{ asset('assets/js/plugin/bootstrap-notify/bootstrap-notify.min.js') }}"></script>
+    {{-- <script src="{{ asset('assets/js/plugin/bootstrap-notify/bootstrap-notify.min.js') }}"></script> --}}
 
     <!-- jQuery Vector Maps -->
     <script src="{{ asset('assets/js/plugin/jsvectormap/jsvectormap.min.js') }}"></script>
     <script src="{{ asset('assets/js/plugin/jsvectormap/world.js') }}"></script>
 
     <!-- Sweet Alert -->
-    <script src="{{ asset('assets/js/plugin/sweetalert/sweetalert.min.js') }}"></script>
+    <script src="{{ asset('../assets/js/plugin/sweetalert/sweetalert.min.js') }}"></script>
 
     <!-- Kaiadmin JS -->
     <script src="{{ asset('assets/js/kaiadmin.min.js') }}"></script>

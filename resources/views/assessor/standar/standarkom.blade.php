@@ -11,7 +11,7 @@
       {{-- <h3 class="fw-bold mb-3">DataTables.Net</h3> --}}
       <ul class="breadcrumbs mb-3">
         <li class="nav-home">
-          <a href="/dasboard">
+          <a href="/dasboard/as">
             <i class="icon-home"></i>
           </a>
         </li>
@@ -41,7 +41,7 @@
             </div>
           </div>
             <div class="table-responsive pt-3">
-              <table id="add-row" class="display table table-striped table-hover">
+              <table id="add-row" class="display table table-striped table-hover table-head-bg-black">
                 <thead>
                   <tr>
                     <th>Unit Code</th>
@@ -72,10 +72,25 @@
                       <td>{{$item->assessor->user->full_name}}</td>
                       <td>
                         <div class="form-button-action">
-                          <a href="/veditus/{{$item->id}}" class="btn btn-link btn-primary btn-lg">
+                            {{-- <tr>
+                                <td style="width: 40%; vertical-align: middle">
+                                  By passing a parameter, you can execute something
+                                  else for cancel
+                                </td>
+                                <td>
+                                  <button
+                                    type="button"
+                                    class="btn btn-danger"
+                                    id="alert_demo_8"
+                                  >
+                                    Show me
+                                  </button>
+                                </td>
+                              </tr> --}}
+                          <a href="/veditst/{{$item->id}}" class="btn btn-link btn-primary btn-lg" >
                             <i class="fa fa-edit"></i>
                           </a>
-                          <a class="btn btn-link btn-danger" onclick="return confirm('yakin hapus?')" href="/user/delete/{{$item->id}}">
+                          <a class="btn btn-link btn-danger" onclick="return confirm('yakin hapus?')" href="/delete/st/{{$item->id}}">
                             <i class="fa fa-times"></i>
                           </a>
                         </div>
@@ -108,6 +123,44 @@
           sessionStorage.fonts = true;
         },
       });
+
+      $("#alert_demo_8").click(function (e) {
+            swal({
+              title: "Are you sure?",
+              text: "You won't be able to revert this!",
+              type: "warning",
+              buttons: {
+                cancel: {
+                  visible: true,
+                  text: "No, cancel!",
+                  className: "btn btn-danger",
+                },
+                confirm: {
+                  text: "Yes, delete it!",
+                  className: "btn btn-success",
+                },
+              },
+            }).then((willDelete) => {
+              if (willDelete) {
+                swal("Poof! Your imaginary file has been deleted!", {
+                  icon: "success",
+                  buttons: {
+                    confirm: {
+                      className: "btn btn-success",
+                    },
+                  },
+                });
+              } else {
+                swal("Your imaginary file is safe!", {
+                  buttons: {
+                    confirm: {
+                      className: "btn btn-success",
+                    },
+                  },
+                });
+              }
+            });
+          });
     </script>
     <script src="{{ asset('assets/js/custom.js') }}"></script>
     <script src="{{ asset('assets/js/core/jquery-3.7.1.min.js') }}"></script>

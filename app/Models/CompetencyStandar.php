@@ -23,5 +23,8 @@ class CompetencyStandar extends Model
     {
         return $this->hasMany(CompetencyElement::class);
     }
-
+    public function elements()
+    {
+        return $this->hasMany(CompetencyElement::class, 'competency_id', 'id');
+    }
 }

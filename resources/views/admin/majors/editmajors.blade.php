@@ -1,3 +1,4 @@
+
 @extends('template.template')
 @section('content')
 <div class="main m-4">

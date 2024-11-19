@@ -19,7 +19,7 @@ class AuthController extends Controller
             if ($user->role == 'admin') {
                 return redirect('/dasboard');
             } elseif ($user->role == 'assessor') {
-                return redirect('/vaddst');
+                return redirect('/dasboard/as');
             } else {
                 return redirect('/student-page');
             }
@@ -32,7 +32,7 @@ class AuthController extends Controller
     public function logout(Request $request){
 
         Auth::logout();
-        return redirect('/login');
+        return redirect('/');
     }
 
 }
