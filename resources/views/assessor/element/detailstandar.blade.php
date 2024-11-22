@@ -34,9 +34,9 @@
         <div class="card">
           <div class="card-header">
             <div class="d-flex align-items-center">
-                <h4 class="card-title me-auto">Majors</h4>
-                <a type="button" class="btn btn-primary ms-auto" href="/vaddmj">
-                    Add Majors
+                <h4 class="card-title me-auto">Element Competency</h4>
+                <a type="button" class="btn btn-primary ms-auto" href="/vadd">
+                    Add Element
                 </a>
             </div>
           </div>
@@ -44,33 +44,33 @@
               <table id="add-row" class="display table table-striped table-hover">
                 <thead>
                   <tr>
-                    <th>Major Name</th>
-                    <th>Description</th>
+                    <th>No</th>
+                    <th>Criteria</th>
                     <th style="width: 10%">Action</th>
                   </tr>
                 </thead>
-                <tfoot>
+                {{-- <tfoot>
                   <tr>
                     <th>Major Name</th>
                     <th>Description</th>
                     <th>Action</th>
                   </tr>
-                </tfoot>
+                </tfoot> --}}
                 <tbody>
                     @foreach ($majors as $key => $item)
                     <tr>
-                        <td>{{$item->major_name}}</td>
-                        <td>{{$item->description}}</td>
-                        <td>
-                            <div class="form-button-action">
-                                <a href="javascript:void(0)" class="btn btn-link btn-primary btn-lg" onclick="editItem({{ $item->id }})">
-                                    <i class="fa fa-edit"></i>
-                                </a>
-                                <a href="javascript:void(0)" class="btn btn-link btn-danger" onclick="deleteItem({{ $item->id }})">
-                                    <i class="fa fa-times"></i>
-                                </a>
-                            </div>
-                        </td>
+                      <td>{{$key+1}}</td>
+                      <td>{{$item->criteria}}</td>
+                      <td>
+                        <div class="form-button-action">
+                          <a href="/majors/edit/{{$item->id}}" class="btn btn-link btn-primary btn-lg">
+                            <i class="fa fa-edit"></i>
+                          </a>
+                          <a class="btn btn-link btn-danger" href="/deletemj/{{$item->id}}" onclick="return confirm('yakin delete?')">
+                            <i class="fa fa-times"></i>
+                          </a>
+                        </div>
+                      </td>
                     </tr>
                     @endforeach
                 </tbody>
@@ -83,55 +83,7 @@
 </div>
 
 <script src="{{ asset('assets/js/plugin/webfont/webfont.min.js') }}"></script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
     <script>
-        function editItem(id) {
-        Swal.fire({
-            title: 'Are you sure?',
-            text: "You want to edit this major?",
-            icon: 'question',
-            showCancelButton: true,
-            confirmButtonText: 'Yes, edit it!',
-            cancelButtonText: 'No, cancel'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                // Redirect to the edit page
-                window.location.href = '/majors/edit/' + id;
-            }
-        });
-    }
-
-    function deleteItem(id) {
-        Swal.fire({
-            title: 'Are you sure?',
-            text: "You won't be able to revert this!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonText: 'Yes, delete it!',
-            cancelButtonText: 'No, keep it'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                // Redirect to the delete route
-                window.location.href = '/deletemj/' + id;
-            }
-        });
-    }
-    function deleteItem(id) {
-                Swal.fire({
-                    title: 'Are you sure?',
-                    text: "You won't be able to revert this!",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonText: 'Yes, delete it!',
-                    cancelButtonText: 'No, keep it'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        // Redirect to the delete route
-                        window.location.href = '/deletemj/' + id;
-                    }
-                });
-            }
       WebFont.load({
         google: { families: ["Public Sans:300,400,500,600,700"] },
         custom: {
@@ -182,25 +134,5 @@
       });
     </script>
 
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script>
-    // SweetAlert2 Notification
-    @if (session('success'))
-        Swal.fire({
-            icon: 'success',
-            title: 'Success!',
-            text: '{{ session('success') }}',
-            timer: 3000,
-            showConfirmButton: false
-        });
-    @elseif (session('error'))
-        Swal.fire({
-            icon: 'error',
-            title: 'Error!',
-            text: '{{ session('error') }}',
-            timer: 3000,
-            showConfirmButton: false
-        });
-    @endif
-</script>
+
 @endsection

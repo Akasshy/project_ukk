@@ -73,12 +73,9 @@
         <div class="sidebar-wrapper scrollbar scrollbar-inner">
           <div class="sidebar-content">
             <ul class="nav nav-secondary">
-                <li class="nav-item active">
+                <li class="nav-item">
                   <a
-                    data-bs-toggle="collapse"
-                    href="/dasboard/assessor"
-                    class="collapsed"
-                    aria-expanded="false"
+                    href="/dasboard/as"
                   >
                     <i class="fas fa-home"></i>
                     <p>Dashboard</p>
@@ -98,7 +95,7 @@
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a data-bs-toggle="collapse" href="/penilaian">
+                  <a href="/penilaians">
                     <i class="fas fa-pen-square"></i>
                     <p>Penilaian ujian </p>
                   </a>
@@ -112,7 +109,7 @@
                   <div class="collapse" id="laporan">
                     <ul class="nav nav-collapse">
                       <li>
-                        <a href="forms/forms.html">
+                        <a href="/select/standar">
                           <span class="sub-item">Hasil Ujian</span>
                         </a>
                       </li>
@@ -232,6 +229,8 @@
 
       <!-- End Custom template -->
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <!--   Core JS Files   -->
     <script src="{{ asset('assets/js/core/jquery-3.7.1.min.js') }}"></script>
     <script src="{{ asset('assets/js/core/popper.min.js') }}"></script>

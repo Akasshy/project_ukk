@@ -19,13 +19,7 @@
           <i class="icon-arrow-right"></i>
         </li>
         <li class="nav-item">
-          <a href="#">Assessor</a>
-        </li>
-        <li class="separator">
-          <i class="icon-arrow-right"></i>
-        </li>
-        <li class="nav-item">
-          <a href="">Standar Kompetensi</a>
+          <a href="#" class="fw-bold">Subjek penilaian</a>
         </li>
       </ul>
     </div>
@@ -34,10 +28,11 @@
         <div class="card">
           <div class="card-header">
             <div class="d-flex align-items-center">
-                <h4 class="card-title me-auto">Standar Kompetensi</h4>
-                <a type="button" class="btn btn-primary ms-auto" href="/vaddst">
+                <h4 class="card-title me-auto">Subjek Penilaian</h4>
+                
+                {{-- <a type="button" class="btn btn-primary ms-auto" href="/vaddst">
                     Add standar
-                </a>
+                </a> --}}
             </div>
           </div>
             <div class="table-responsive pt-3">
@@ -48,20 +43,9 @@
                     <th>Unit Title</th>
                     <th>Unit Description</th>
                     <th>Major</th>
-                    <th>Assessor</th>
                     <th style="width: 10%">Action</th>
                   </tr>
                 </thead>
-                <tfoot>
-                  <tr>
-                    <th>Unit Code</th>
-                    <th>Unit Title</th>
-                    <th>Unit Description</th>
-                    <th>Major</th>
-                    <th>Assessor</th>
-                    <th>Action</th>
-                  </tr>
-                </tfoot>
                 <tbody>
                     @foreach ($standars as $key => $item)
                     <tr>
@@ -69,7 +53,6 @@
                         <td>{{$item->unit_title}}</td>
                         <td>{{$item->unit_description}}</td>
                         <td>{{$item->major->major_name}}</td>
-                        <td>{{$item->assessor->user->full_name}}</td>
                         <td>
                             <!-- Dropdown Action -->
                             <div class="form-button-action">
@@ -80,20 +63,8 @@
                                     <ul class="dropdown-menu" aria-labelledby="actionDropdown{{ $item->id }}">
                                         <!-- Tombol Detail -->
                                         <li>
-                                            <a href="/detail/st/{{ $item->id }}" class="dropdown-item">
-                                                <i class="fa fa-info-circle me-2"></i>Detail
-                                            </a>
-                                        </li>
-                                        <!-- Tombol Edit -->
-                                        <li>
-                                            <a href="/veditst/{{ $item->id }}" class="dropdown-item">
-                                                <i class="fa fa-edit me-2"></i>Edit
-                                            </a>
-                                        </li>
-                                        <!-- Tombol Delete -->
-                                        <li>
-                                            <a href="javascript:void(0)" class="dropdown-item text-danger" onclick="confirmDelete({{ $item->id }})">
-                                                <i class="fa fa-times me-2"></i>Delete
+                                            <a href="/select/siswa/{{ $item->id }}" class="dropdown-item">
+                                                <i class="fa fa-info-circle me-2"></i>pilih siswa
                                             </a>
                                         </li>
                                     </ul>
@@ -110,33 +81,9 @@
       </div>
     </div>
 </div>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <script src="{{ asset('assets/js/plugin/webfont/webfont.min.js') }}"></script>
     <script>
-        @if (session('success'))
-        Swal.fire({
-            title: 'Berhasil!',
-            text: "{{ session('success') }}",
-            icon: 'success',
-            confirmButtonText: 'OK'
-        });
-       @endif
-          function confirmDelete(id) {
-        Swal.fire({
-            title: 'Yakin hapus?',
-            text: "Data yang dihapus tidak bisa dikembalikan!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Ya, hapus!'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                // Redirect ke route delete
-                window.location.href = `/delete/st/${id}`;
-            }
-        });
-    }
       WebFont.load({
         google: { families: ["Public Sans:300,400,500,600,700"] },
         custom: {
@@ -188,6 +135,5 @@
         });
       });
     </script>
-
 
 @endsection

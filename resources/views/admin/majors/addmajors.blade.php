@@ -2,7 +2,6 @@
 @section('content')
 <div class="main m-4">
     <div class="page-header">
-        {{-- <h3 class="fw-bold mb-3">DataTables.Net</h3> --}}
         <ul class="breadcrumbs mb-3">
           <li class="nav-home">
             <a href="/dasboard">
@@ -41,5 +40,6 @@
         </form>
     </div>
 </div>
+
 
 @endsection

@@ -17,9 +17,10 @@ class AdminController extends Controller
         return view('admin/users/users',$users,);
     }
 
-    public function adduser(Request $request)
-    {
-        // Buat user
+   public function adduser(Request $request)
+{
+    try {
+
         $user = User::create([
             'full_name' => $request->full_name,
             'username' => $request->username,
@@ -46,8 +47,13 @@ class AdminController extends Controller
             ]);
         }
 
-        return redirect('/users')->with('success', 'User added successfully!');
+        // Jika berhasil, kirimkan flash session dan arahkan
+        return redirect('/users')->with('success', 'User telah di tambahkan!');
+    } catch (\Exception $e) {
+        // Jika terjadi kesalahan, kirimkan flash session error
+        return redirect('/users')->with('error', 'User gagal di tambahkan, silahkan ulangi lagi.');
     }
+}
 
     public function viewadduser(){
         $majors['majors'] = Major::all();
@@ -65,7 +71,7 @@ class AdminController extends Controller
     }
     public function student(){
         $users['users'] = Student::all();
-        return view('admin/users/student',$users,);
+        return view('admin/users/student',$users,); 
     }
 
     public function fullname(){
@@ -73,17 +79,12 @@ class AdminController extends Controller
         return view('template/template', compact('username'));
     }
 
-    public function addmajors(Request $request){
-        Major::create([
-            'major_name' => $request->major_name,
-            'description' => $request->description
-        ]);
-        return redirect('/majors')->with('success','');
-    }
+
+
 
     public function deleteuser(Request $request){
         User::where('id', $request->id)->delete();
-        return redirect('/users')->with('success','');
+        return redirect('/users')->with('success',);
     }
 
     public function editUser($id)
@@ -147,6 +148,22 @@ class AdminController extends Controller
     public function majors(){
         $majors['majors'] = Major::all();
         return view('admin/majors/majors',$majors,);
+    }
+    public function addmajors(Request $request)
+    {
+        try {
+            // Tambahkan data ke database
+            Major::create([
+                'major_name' => $request->major_name,
+                'description' => $request->description
+            ]);
+
+            // Redirect dengan session 'success'
+            return redirect('/majors')->with('success', 'Major successfully added!');
+        } catch (\Exception $e) {
+            // Redirect dengan session 'error' jika terjadi error
+            return redirect('/majors')->with('error', 'Failed to add major.');
+        }
     }
     public function viewaddmajors(){
         return view('admin/majors/addmajors');

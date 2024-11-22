@@ -13,7 +13,10 @@ class CompetencyStandar extends Model
     {
         return $this->belongsTo(Major::class);
     }
-
+    public function examinations()
+    {
+        return $this->hasMany(Examination::class, 'standar_id');
+    }
     public function assessor()
     {
         return $this->belongsTo(Assessor::class);
@@ -27,4 +30,11 @@ class CompetencyStandar extends Model
     {
         return $this->hasMany(CompetencyElement::class, 'competency_id', 'id');
     }
+    public function competency_elements()
+    {
+        return $this->hasMany(CompetencyElement::class, 'competency_id');
+    }
+
+    // Relasi ke major (jurusan)
+
 }

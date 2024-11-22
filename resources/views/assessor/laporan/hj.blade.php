@@ -19,13 +19,7 @@
           <i class="icon-arrow-right"></i>
         </li>
         <li class="nav-item">
-          <a href="#">Assessor</a>
-        </li>
-        <li class="separator">
-          <i class="icon-arrow-right"></i>
-        </li>
-        <li class="nav-item">
-          <a href="">Standar Kompetensi</a>
+          <a href="#" class="fw-bold">Data soal ujian</a>
         </li>
       </ul>
     </div>
@@ -34,66 +28,55 @@
         <div class="card">
           <div class="card-header">
             <div class="d-flex align-items-center">
-                <h4 class="card-title me-auto">Standar Kompetensi</h4>
-                <a type="button" class="btn btn-primary ms-auto" href="/vaddst">
-                    Add standar
-                </a>
+                <h4 class="card-title me-auto">Data soal ujian</h4>
+                {{-- <select name="" id="" class="form-select w-75">
+                    @foreach ($standars as $item)
+                        <option value="{{ $item->id }}">{{ $item->unit_code }},{{ $item->unit_title }}</option>
+                    @endforeach
+                </select> --}}
             </div>
           </div>
-            <div class="table-responsive pt-3">
-              <table id="add-row" class="display table table-striped table-hover table-head-bg-black">
+          <div class="table-responsive pt-3">
+            <table id="add-row" class="display table table-striped table-hover table-head-bg-black">
                 <thead>
-                  <tr>
-                    <th>Unit Code</th>
-                    <th>Unit Title</th>
-                    <th>Unit Description</th>
-                    <th>Major</th>
-                    <th>Assessor</th>
-                    <th style="width: 10%">Action</th>
-                  </tr>
+                    <tr>
+                        <th>No</th>
+                        <th>Nama Siswa</th>
+                        <th>Final Score</th>
+                        <th>Status</th>
+                        <th style="width: 10%">Action</th>
+                    </tr>
                 </thead>
                 <tfoot>
-                  <tr>
-                    <th>Unit Code</th>
-                    <th>Unit Title</th>
-                    <th>Unit Description</th>
-                    <th>Major</th>
-                    <th>Assessor</th>
-                    <th>Action</th>
-                  </tr>
+                    <tr>
+                        <th>No</th>
+                        <th>Nama Siswa</th>
+                        <th>Final Score</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
                 </tfoot>
                 <tbody>
-                    @foreach ($standars as $key => $item)
+                    @foreach ($students as $key => $student)
                     <tr>
-                        <td>{{$item->unit_code}}</td>
-                        <td>{{$item->unit_title}}</td>
-                        <td>{{$item->unit_description}}</td>
-                        <td>{{$item->major->major_name}}</td>
-                        <td>{{$item->assessor->user->full_name}}</td>
+                        <td>{{ $key  }}</td>
+                        <td>{{ $student['student_name'] }}</td>
+                        <td>{{ $student['final_score'] }}%</td>
                         <td>
-                            <!-- Dropdown Action -->
+                            <span class="badge {{ $student['status'] == 'Competent' ? 'bg-success' : 'bg-danger' }}">
+                                {{ $student['status'] }}
+                            </span>
+                        </td>
+                        <td>
                             <div class="form-button-action">
                                 <div class="dropdown">
-                                    <button class="btn btn-primary dropdown-toggle" type="button" id="actionDropdown{{ $item->id }}" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <button class="btn btn-primary dropdown-toggle" type="button" id="actionDropdown{{ $student['student_id'] }}" data-bs-toggle="dropdown" aria-expanded="false">
                                         Action
                                     </button>
-                                    <ul class="dropdown-menu" aria-labelledby="actionDropdown{{ $item->id }}">
-                                        <!-- Tombol Detail -->
+                                    <ul class="dropdown-menu" aria-labelledby="actionDropdown{{ $student['student_id'] }}">
                                         <li>
-                                            <a href="/detail/st/{{ $item->id }}" class="dropdown-item">
+                                            <a href="/results/major/{{ $student['student_id'] }}" class="dropdown-item">
                                                 <i class="fa fa-info-circle me-2"></i>Detail
-                                            </a>
-                                        </li>
-                                        <!-- Tombol Edit -->
-                                        <li>
-                                            <a href="/veditst/{{ $item->id }}" class="dropdown-item">
-                                                <i class="fa fa-edit me-2"></i>Edit
-                                            </a>
-                                        </li>
-                                        <!-- Tombol Delete -->
-                                        <li>
-                                            <a href="javascript:void(0)" class="dropdown-item text-danger" onclick="confirmDelete({{ $item->id }})">
-                                                <i class="fa fa-times me-2"></i>Delete
                                             </a>
                                         </li>
                                     </ul>
@@ -102,8 +85,8 @@
                         </td>
                     </tr>
                     @endforeach
-                </tbody>
-              </table>
+                  </tbody>
+                </table>
             </div>
           </div>
         </div>
@@ -113,30 +96,7 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="{{ asset('assets/js/plugin/webfont/webfont.min.js') }}"></script>
     <script>
-        @if (session('success'))
-        Swal.fire({
-            title: 'Berhasil!',
-            text: "{{ session('success') }}",
-            icon: 'success',
-            confirmButtonText: 'OK'
-        });
-       @endif
-          function confirmDelete(id) {
-        Swal.fire({
-            title: 'Yakin hapus?',
-            text: "Data yang dihapus tidak bisa dikembalikan!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Ya, hapus!'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                // Redirect ke route delete
-                window.location.href = `/delete/st/${id}`;
-            }
-        });
-    }
+
       WebFont.load({
         google: { families: ["Public Sans:300,400,500,600,700"] },
         custom: {

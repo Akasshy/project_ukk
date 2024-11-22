@@ -18,4 +18,8 @@ class CompetencyElement extends Model
     {
         return $this->hasMany(Examination::class, 'element_id');
     }
+    public function competency_standard()
+    {
+        return $this->belongsTo(CompetencyStandar::class, 'competency_id');
+    }
 }

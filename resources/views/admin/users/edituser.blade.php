@@ -50,15 +50,12 @@
             </div>
             <div class="mb-3">
                 <label for="role" class="form-label">Role</label>
-                <input type="text" class="form-control" id="username" name="username"
-                       value="{{ $user->role }}" readonly required>
-                {{-- <select class="form-select" id="role" name="role" required>
+                <select class="form-select" id="role" name="role" required >
                     <option value="admin" {{ $user->role === 'admin' ? 'selected' : '' }}>Admin</option>
                     <option value="student" {{ $user->role === 'student' ? 'selected' : '' }}>Student</option>
                     <option value="assessor" {{ $user->role === 'assessor' ? 'selected' : '' }}>Assessor</option>
-                </select> --}}
+                </select>
             </div>
-
             {{-- Role-Specific Fields --}}
             @if ($user->role == 'student')
 
@@ -112,22 +109,4 @@
     </div>
 </div>
 
-{{-- <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const roleSelect = document.getElementById('role');
-        const studentFields = document.getElementById('student-fields');
-        const assessorFields = document.getElementById('assessor-fields');
-
-        const updateFieldsVisibility = () => {
-            const role = roleSelect.value;
-
-            studentFields.style.display = role === 'student' ? 'block' : 'none';
-            assessorFields.style.display = role === 'assessor' ? 'block' : 'none';
-        };
-
-        // Run on page load and on role change
-        updateFieldsVisibility();
-        roleSelect.addEventListener('change', updateFieldsVisibility);
-    });
-</script> --}}
 @endsection

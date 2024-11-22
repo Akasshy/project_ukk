@@ -61,6 +61,7 @@ Route::get('/majors/edit/{id}', [AdminController::class, 'edit']);
 Route::get('/deletemj/{id}',[AdminController::class,'deletemj']);
 Route::put('/majors/{id}/update', [AdminController::class, 'update']);
 Route::get('/logout',[AuthController::class,'logout']);
+//end amin
 
 //ASSESOR
 //STANDAR
@@ -78,3 +79,18 @@ Route::post('/add/element',[AssessorController::class,'addelement']);
 Route::put('/update/element/{id}', [AssessorController::class, 'updateElement'])->name('update.element');
 Route::get('/delete/element/{id}', [AssessorController::class, 'deleteele']);
 
+//PENILAIAN
+Route::get('/penilaians',[AssessorController::class,'penilaian']);
+Route::get('/select/siswa/{id}', [AssessorController::class, 'selectSiswa']);
+Route::get('/menilai/{standar_id}/{id}', [AssessorController::class, 'dtPenilaian']);
+Route::post('/add/examination/{student_id}/{standar_id}', [AssessorController::class, 'addExamination']);
+//Laporan
+Route::get('/hasil/ujian',[AssessorController::class,'hasilUjian']);
+// Route::get('/select/standar',[AssessorController::class,'standarHj']);
+// Route::get('/results/major/{majorId}', [AssessorController::class, 'getResultsByMajor'])->name('results.byMajor');
+Route::get('/result/major', [AssessorController::class, 'result']);
+Route::get('/select/standar', [AssessorController::class, 'result']);
+
+// Route::get('/exam-result/{standard}', [AssessorController::class, 'fetchExamResult']);
+
+// Route::get('/exam/report/competency-standard/{id}', [AssessorController::class, 'report']);

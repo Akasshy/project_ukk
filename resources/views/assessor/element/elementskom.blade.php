@@ -1,11 +1,11 @@
 @extends('template.templateassessor')
 @section('content')
 <link rel="stylesheet" href="{{ asset('assets/css/bootstrap.min.css') }}" />
-@if (session('success'))
+{{-- @if (session('success'))
     <div class="alert alert-success">
         {{ session('success') }}
     </div>
-@endif
+@endif --}}
 
 <div class="main p-3">
     <div class="page-header">
@@ -83,7 +83,7 @@
                                         <button class="btn btn-link btn-primary" data-bs-toggle="modal" data-bs-target="#modalEditElement{{ $element->id }}">
                                             <i class="fa fa-edit"></i>
                                         </button>
-                                        <a href="/delete/element/{{ $element->id }}" class="btn btn-link btn-danger" onclick="return confirm('Are you sure?')">
+                                        <a href="javascript:void(0)" class="btn btn-link btn-danger" onclick="confirmDeleteElement({{ $element->id }})">
                                             <i class="fa fa-times"></i>
                                         </a>
                                     </td>
@@ -119,13 +119,39 @@
                             </tbody>
                         </table>
                     </div>
-                    @endforeach
-
+                @endforeach
                 </div>
             </div>
         </div>
     </div>
 </div>
-
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="{{ asset('assets/js/bootstrap.bundle.min.js') }}"></script>
+<script>
+   @if (session('success'))
+        Swal.fire({
+            title: 'Berhasil!',
+            text: "{{ session('success') }}",
+            icon: 'success',
+            confirmButtonText: 'OK'
+        });
+    @endif
+    function confirmDeleteElement(id) {
+        Swal.fire({
+            title: 'Apakah Anda yakin?',
+            text: "Data yang dihapus tidak dapat dikembalikan!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Ya, hapus!',
+            cancelButtonText: 'Batal'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Redirect ke route delete
+                window.location.href = `/delete/element/${id}`;
+            }
+        });
+    }
+</script>
 @endsection
