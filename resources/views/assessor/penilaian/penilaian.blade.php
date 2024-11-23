@@ -29,7 +29,7 @@
           <div class="card-header">
             <div class="d-flex align-items-center">
                 <h4 class="card-title me-auto">Subjek Penilaian</h4>
-                
+
                 {{-- <a type="button" class="btn btn-primary ms-auto" href="/vaddst">
                     Add standar
                 </a> --}}
@@ -63,8 +63,8 @@
                                     <ul class="dropdown-menu" aria-labelledby="actionDropdown{{ $item->id }}">
                                         <!-- Tombol Detail -->
                                         <li>
-                                            <a href="/select/siswa/{{ $item->id }}" class="dropdown-item">
-                                                <i class="fa fa-info-circle me-2"></i>pilih siswa
+                                            <a href="/menilai/{{ $item->id }}" class="dropdown-item">
+                                                <i class="fa fa-info-circle me-2"></i>Menilai
                                             </a>
                                         </li>
                                     </ul>

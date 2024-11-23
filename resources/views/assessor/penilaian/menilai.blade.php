@@ -37,60 +37,108 @@
       </ul>
     </div>
     <div class="row">
-      <div class="col-md-12">
-        <div class="card">
-          <div class="card-header">
-            <div class="d-flex align-items-center">
-                <h4 class="card-title me-auto">Menilai</h4>
-            </div>
-          </div>
-            <div class="table-responsive pt-3">
-              <table id="add-row" class="display table table-striped table-hover table-head-bg-black">
-                <thead>
-                  <tr>
-                    <th style="width: 6%">No</th>
-                    <th>Criteria</th>
-                    <th style="width: 23%">Action</th>
-                  </tr>
-                </thead>
-                <form action="/add/examination/{{ $student_id }}/{{ $standar_id->id }}" method="post">
+        <div class="col-md-12">
+            <div class="card">
+                <form action="/addExamination/{{ $standar_id->id }}" method="post">
                     @csrf
-                    <tfoot>
-                        <tr>
-                            <th></th>
-                            <th></th>
-                            <th>
-                                <input type="submit" class="btn btn-primary w-100 mb-2" value="Menilai">
-                                <input type="submit" class="btn btn-success me-3 ms-4" value="All 1">
-                                <input type="submit" class="btn btn-danger " value="All 0">
-                                {{-- <input type="text" type="hidden" style="display: none" name="standar_id" value="{{ $standar_id }}"> --}}
-                            </th>
-                        </tr>
-                    </tfoot>
-                    <tbody>
-                        @foreach ($element as $key => $item)
-                        <tr>
-                            <td>{{ $key + 1 }}</td>
-                            <td>{{ $item->criteria }}</td>
-                            <td>
-                                <select name="status[{{ $item->id }}]" class="form-select status-select">
-                                    <option value="1">Selesai</option>
-                                    <option value="0">Tidak Selesai</option>
+                    <div class="card-header">
+                        <div class="d-flex align-items-center">
+                            <h4 class="card-title me-auto">Menilai</h4>
+                            <div class="w-75 ms-auto">
+                                <select name="student_id" id="studentSelect" class="form-select w-75 ms-auto">
+                                    @foreach ($students as $key => $item)
+                                        <option value="{{ $item->id }}">
+                                            {{ $item->nisn }}, {{ $item->user->full_name }}
+                                        </option>
+                                    @endforeach
                                 </select>
-                            </td>
-                        </tr>
-                        @endforeach
-                    </tbody>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="dynamicTable">
+                        <div class="table-responsive pt-3">
+                            <table id="add-row" class="display table table-striped table-hover table-head-bg-black">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 6%">No</th>
+                                        <th>Criteria</th>
+                                        <th style="width: 23%">Action</th>
+                                    </tr>
+                                </thead>
+                                <tfoot>
+                                    <tr>
+                                        <th></th>
+                                        <th></th>
+                                        <th>
+                                            <input type="submit" class="btn btn-primary w-100 mb-2" value="Menilai">
+                                            <input type="submit" class="btn btn-success me-3 ms-4" value="All 1">
+                                            <input type="submit" class="btn btn-danger" value="All 0">
+                                        </th>
+                                    </tr>
+                                </tfoot>
+                                <tbody>
+                                    @foreach ($element as $key => $item)
+                                    <tr>
+                                        <td>{{ $key + 1 }}</td>
+                                        <td>{{ $item->criteria }}</td>
+                                        <td>
+                                            @php
+                                                $exam = $examinations->has($students->first()->id ?? null)
+                                                    ? $examinations[$students->first()->id]->firstWhere('element_id', $item->id)
+                                                    : null;
+                                                $status = $exam ? $exam->status : null;
+                                            @endphp
+                                            <select name="status[{{ $item->id }}]" class="form-select status-select">
+                                                <option value="1" {{ $status == 1 ? 'selected' : '' }}>Selesai</option>
+                                                <option value="0" {{ $status == 0 ? 'selected' : '' }}>Tidak Selesai</option>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </form>
-              </table>
             </div>
-          </div>
         </div>
-      </div>
+
+
     </div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
+  document.getElementById('studentSelect').addEventListener('change', function () {
+                const studentId = this.value;
+                const standarId = "{{ $standar_id->id }}";
+
+                // AJAX Request untuk mengganti tabel berdasarkan student_id
+                fetch(`/get-examination-data/${standarId}/${studentId}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        const tableBody = document.querySelector('#dynamicTable tbody');
+                        tableBody.innerHTML = ''; // Kosongkan isi tabel
+
+                        // Isi ulang tabel dengan data baru
+                        data.elements.forEach((element, index) => {
+                            const status = data.examinations[element.id] ?? null;
+                            const row = `
+                                <tr>
+                                    <td>${index + 1}</td>
+                                    <td>${element.criteria}</td>
+                                    <td>
+                                        <select name="status[${element.id}]" class="form-select status-select">
+                                            <option value="1" ${status == 1 ? 'selected' : ''}>Selesai</option>
+                                            <option value="0" ${status == 0 ? 'selected' : ''}>Tidak Selesai</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                            `;
+                            tableBody.insertAdjacentHTML('beforeend', row);
+                        });
+                    })
+                    .catch(error => console.error('Error fetching data:', error));
+            });
      @if (session('success'))
         Swal.fire({
             title: 'Berhasil!',

@@ -81,16 +81,18 @@ Route::get('/delete/element/{id}', [AssessorController::class, 'deleteele']);
 
 //PENILAIAN
 Route::get('/penilaians',[AssessorController::class,'penilaian']);
-Route::get('/select/siswa/{id}', [AssessorController::class, 'selectSiswa']);
-Route::get('/menilai/{standar_id}/{id}', [AssessorController::class, 'dtPenilaian']);
-Route::post('/add/examination/{student_id}/{standar_id}', [AssessorController::class, 'addExamination']);
+Route::get('/menilai/{id}', [AssessorController::class, 'dtPenilaian']);
+Route::post('/addExamination/{id}', [AssessorController::class, 'addOrUpdateExamination']);
+Route::get('/get-examination-data/{standar_id}/{student_id}', [AssessorController::class, 'getExaminationData']);
+
 //Laporan
 Route::get('/hasil/ujian',[AssessorController::class,'hasilUjian']);
 // Route::get('/select/standar',[AssessorController::class,'standarHj']);
 // Route::get('/results/major/{majorId}', [AssessorController::class, 'getResultsByMajor'])->name('results.byMajor');
-Route::get('/result/major', [AssessorController::class, 'result']);
+// Route::get('/result/major', [AssessorController::class, 'result']);
+
 Route::get('/select/standar', [AssessorController::class, 'result']);
+Route::get('/get-results', [AssessorController::class, 'fetchResults']);
 
-// Route::get('/exam-result/{standard}', [AssessorController::class, 'fetchExamResult']);
-
+// Route::get('/get-results', [AssessorController::class, 'fetchExamResult']);
 // Route::get('/exam/report/competency-standard/{id}', [AssessorController::class, 'report']);
