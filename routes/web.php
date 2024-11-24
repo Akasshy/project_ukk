@@ -68,6 +68,7 @@ Route::get('/logout',[AuthController::class,'logout']);
 Route::get('/standars',[AssessorController::class,'standars']);
 Route::get('/vaddst',[AssessorController::class,'vaddst']);
 Route::post('/addst',[AssessorController::class,'addst']);
+Route::get('/detail/standar/{id}',[AssessorController::class,'detailsStandar']);
 // Route untuk edit competency standard
 Route::get('/veditst/{id}', [AssessorController::class, 'edit']);
 Route::post('/updatest/{id}', [AssessorController::class, 'update']);
@@ -87,12 +88,12 @@ Route::get('/get-examination-data/{standar_id}/{student_id}', [AssessorControlle
 
 //Laporan
 Route::get('/hasil/ujian',[AssessorController::class,'hasilUjian']);
-// Route::get('/select/standar',[AssessorController::class,'standarHj']);
-// Route::get('/results/major/{majorId}', [AssessorController::class, 'getResultsByMajor'])->name('results.byMajor');
-// Route::get('/result/major', [AssessorController::class, 'result']);
-
 Route::get('/select/standar', [AssessorController::class, 'result']);
 Route::get('/get-results', [AssessorController::class, 'fetchResults']);
 
-// Route::get('/get-results', [AssessorController::class, 'fetchExamResult']);
-// Route::get('/exam/report/competency-standard/{id}', [AssessorController::class, 'report']);
+Route::get('/laporan-hasil-ujian', [AssessorController::class, 'report']);
+Route::get('/get-report', [AssessorController::class, 'getReport']);
+
+Route::get('/detail/laporan/{student_id}/{standar_id}',[AssessorController::class,'detailLaporan']);
+
+

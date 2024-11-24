@@ -35,13 +35,6 @@
           <div class="card-header">
             <div class="d-flex align-items-center">
                 <h4 class="card-title me-auto">Data Siswa</h4>
-                {{-- <form action="" method="get" class="w-75 ms-auto">
-                    <select name="" id="" class="form-select w-75 ms-auto">
-                        @foreach ($students as $key => $item)
-                            <option value="">{{$item->nisn}} , {{$item->user->full_name}}</option>
-                        @endforeach
-                    </select>
-                </form> --}}
             </div>
           </div>
             <div class="table-responsive pt-3">

@@ -47,7 +47,7 @@
                                 <th>Nama Siswa</th>
                                 <th>Final Score</th>
                                 <th>Status</th>
-                                <th>Action</th>
+                                {{-- <th>Action</th> --}}
                             </tr>
                         </thead>
                         <tbody>
@@ -101,20 +101,20 @@
                         return `<span class="badge ${badgeClass}">${data}</span>`;
                     }
                 },
-                {
-                    data: 'action',
-                    name: 'action',
-                    orderable: false,
-                    searchable: false,
-                    render: function (data, type, row) {
-                        return `
-                            <div class="form-button-action">
-                                <a href="/menilai/${row.student_id}" class="btn btn-info btn-sm">
-                                    <i class="fas fa-edit"></i> Detail
-                                </a>
-                            </div>`;
-                    },
-                },
+                // {
+                //     data: 'action',
+                //     name: 'action',
+                //     orderable: false,
+                //     searchable: false,
+                //     render: function (data, type, row) {
+                //         return `
+                //             <div class="form-button-action">
+                //                 <a href="/menilai/${row.student_id}" class="btn btn-info btn-sm">
+                //                     <i class="fas fa-edit"></i> Detail
+                //                 </a>
+                //             </div>`;
+                //     },
+                // },
             ],
         });
 

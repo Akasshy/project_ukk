@@ -62,7 +62,7 @@
                                     <tr>
                                         <th style="width: 6%">No</th>
                                         <th>Criteria</th>
-                                        <th style="width: 23%">Action</th>
+                                        <th style="width: 30%">Action</th>
                                     </tr>
                                 </thead>
                                 <tfoot>
@@ -71,8 +71,8 @@
                                         <th></th>
                                         <th>
                                             <input type="submit" class="btn btn-primary w-100 mb-2" value="Menilai">
-                                            <input type="submit" class="btn btn-success me-3 ms-4" value="All 1">
-                                            <input type="submit" class="btn btn-danger" value="All 0">
+                                            <input type="submit" class="btn btn-success ps-5 pe-5 me-3 ms-4" value="Selesai">
+                                            <input type="submit" class="btn btn-danger" value="Tidak selesai">
                                         </th>
                                     </tr>
                                 </tfoot>

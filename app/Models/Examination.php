@@ -18,9 +18,20 @@ class Examination extends Model
     {
         return $this->belongsTo(Assessor::class);
     }
-
+    public function standar()
+    {
+        return $this->belongsTo(CompetencyStandar::class, 'standar_id');
+    }
     public function competencyElement()
     {
         return $this->belongsTo(CompetencyElement::class, 'element_id');
     }
+    public function element()
+    {
+        return $this->belongsTo(CompetencyElement::class, 'element_id');
+    }
+    public function elements()
+{
+    return $this->hasMany(CompetencyElement::class, 'id', 'element_id');
+}
 }

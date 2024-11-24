@@ -114,7 +114,7 @@
                         </a>
                       </li>
                       <li>
-                        <a href="forms/forms.html">
+                        <a href="/laporan-hasil-ujian">
                           <span class="sub-item">Laporan Hasil Ujian</span>
                         </a>
                       </li>
