@@ -9,7 +9,7 @@
     />
     <link
       rel="icon"
-      href="assets/img/kaiadmin/favicon.ico"
+      href="{{ asset('assets/img/kaiadmin/favicon.ico') }}"
       type="image/x-icon"
     />
 
@@ -33,33 +33,30 @@
         });
       </script>
 
+
     <!-- CSS Files -->
     <link rel="stylesheet" href="{{ asset('assets/css/bootstrap.min.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/css/plugins.min.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/css/kaiadmin.min.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/css/demo.css') }}" />
-<!-- SweetAlert2 CSS -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
 
-<!-- SweetAlert2 JS -->
-
-</head>
-<body>
-      <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  </head>
+  <body>
     <div class="wrapper">
       <!-- Sidebar -->
       <div class="sidebar" data-background-color="dark">
         <div class="sidebar-logo">
           <!-- Logo Header -->
           <div class="logo-header" data-background-color="dark">
-            <a href="index.html" class="logo">
-              <img
+            <a href="/dasboard/st" class="text-white fw-bold fs-2">
+                STUDENT
+              {{-- <img
                 src="{{asset('assets/img/kaiadmin/logo_light.svg')}}"
                 alt="navbar brand"
                 class="navbar-brand"
                 height="20"
               />
-            </a>
+            </a> --}}
             <div class="nav-toggle">
               <button class="btn btn-toggle toggle-sidebar">
                 <i class="gg-menu-right"></i>
@@ -77,9 +74,9 @@
         <div class="sidebar-wrapper scrollbar scrollbar-inner">
           <div class="sidebar-content">
             <ul class="nav nav-secondary">
-                <li class="nav-item active">
+                <li class="nav-item">
                   <a
-                    href="/dasboard"
+                    href="/dasboard/st"
                   >
                     <i class="fas fa-home"></i>
                     <p>Dashboard</p>
@@ -87,79 +84,21 @@
 
                 </li>
                 <li class="nav-item">
-                  <a data-bs-toggle="collapse" href="#base">
-                    <i class="fas fa-address-card"></i>
-                    <p>User Management</p>
-                    <span class="caret"></span>
+                  <a href="/hasil/ujian/siswa">
+                    <i class="fas fa-box-open"></i>
+                    <p>Hasil Ujian</p>
                   </a>
-                  <div class="collapse" id="base">
-                    <ul class="nav nav-collapse">
-                      <li>
-                        <a href="/users">
-                          <span class="sub-item">All User</span>
-                        </a>
-                      </li>
-                      <li>
-                        <a href="/dtadmin">
-                          <span class="sub-item">Admin</span>
-                        </a>
-                      </li>
-                      <li>
-                        <a href="/dtassesor">
-                          <span class="sub-item">Assesor</span>
-                        </a>
-                      </li>
-                      <li>
-                        <a href="/dtstudent">
-                          <span class="sub-item">Student</span>
-                        </a>
-                      </li>
-                    </ul>
-                  </div>
-                </li>
-                <li class="nav-item">
-                  <a data-bs-toggle="collapse" href="#forms">
-                    <i class="fas fa-pen-square"></i>
-                    <p>Majors Management</p>
-                    <span class="caret"></span>
-                  </a>
-                  <div class="collapse" id="forms">
-                    <ul class="nav nav-collapse">
-                      <li>
-                        <a href="majors">
-                          <span class="sub-item">Kelola Majors</span>
-                        </a>
-                      </li>
-                    </ul>
-                  </div>
-                </li>
-                <li class="nav-item">
-                  <a data-bs-toggle="collapse" href="#laporan">
-                    <i class="fas fa-pen-square"></i>
-                    <p>Laporan</p>
-                    <span class="caret"></span>
-                  </a>
-                  <div class="collapse" id="laporan">
-                    <ul class="nav nav-collapse">
-                      <li>
-                        <a href="/hasil-ujian">
-                          <span class="sub-item">Hasil Ujian</span>
-                        </a>
-                      </li>
-                    </ul>
-                  </div>
                 </li>
               </ul>
           </div>
         </div>
       </div>
       <!-- End Sidebar -->
-
       <div class="main-panel">
         <div class="main-header">
           <div class="main-header-logo">
             <!-- Logo Header -->
-            <div class="logo-header " data-background-color="dark">
+            <div class="logo-header " >
               <a href="index.html" class="logo">
                 <img
                   src="{{asset('assets/img/kaiadmin/logo_light.svg')}}"
@@ -183,24 +122,9 @@
             <!-- End Logo Header -->
           </div>
           <!-- Navbar Header -->
-          <nav class="navbar navbar-header navbar-header-transparent navbar-expand-lg border-bottom" style="background-color: #1A2035;">
+          <nav class="navbar navbar-expand-lg border-bottom navbar-white" style="background-color: #1A2035;">
             <div class="container-fluid">
-              <nav
-                class="navbar navbar-header-left navbar-expand-lg navbar-form nav-search p-0 d-none d-lg-flex"
-              >
-                {{-- <div class="input-group">
-                  <div class="input-group-prepend">
-                    <button type="submit" class="btn btn-search pe-1">
-                      <i class="fa fa-search search-icon"></i>
-                    </button>
-                  </div>
-                  <input
-                    type="text"
-                    placeholder="Search ..."
-                    class="form-control"
-                  />
-                </div> --}}
-              </nav>
+
 
               <ul class="navbar-nav topbar-nav ms-md-auto align-items-center">
                 <li class="text-dark">
@@ -240,7 +164,7 @@
                             <h4>{{Auth::user()->full_name}}</h4>
                             <p class="text-muted">{{Auth::user()->email}}</p>
                             <a
-                              href="/profile/admin"
+                              href="/profile/student"
                               class="btn btn-xs btn-secondary btn-sm"
                               >View Profile</a
                             >
@@ -268,6 +192,8 @@
 
       <!-- End Custom template -->
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <!--   Core JS Files   -->
     <script src="{{ asset('assets/js/core/jquery-3.7.1.min.js') }}"></script>
     <script src="{{ asset('assets/js/core/popper.min.js') }}"></script>
@@ -296,7 +222,7 @@
     <script src="{{ asset('assets/js/plugin/jsvectormap/world.js') }}"></script>
 
     <!-- Sweet Alert -->
-    <script src="{{ asset('assets/js/plugin/sweetalert/sweetalert.min.js') }}"></script>
+    <script src="{{ asset('../assets/js/plugin/sweetalert/sweetalert.min.js') }}"></script>
 
     <!-- Kaiadmin JS -->
     <script src="{{ asset('assets/js/kaiadmin.min.js') }}"></script>

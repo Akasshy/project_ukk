@@ -13,6 +13,9 @@ use Illuminate\Support\Facades\Auth;
 class AssessorController extends Controller
 {
 
+    public function dasboard(){
+        return view('assessor.assessor-dasboard');
+    }
     public function standars(Request $request)
     {
         $id = Auth::user()->assessor->id;

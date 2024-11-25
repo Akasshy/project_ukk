@@ -1,4 +1,4 @@
-@extends('template/templateassessor')
+@extends('template.templatest')
 @section('content')
 @if (session('user_name'))
 <script>

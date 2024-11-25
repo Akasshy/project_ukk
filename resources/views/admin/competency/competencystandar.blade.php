@@ -11,7 +11,7 @@
       {{-- <h3 class="fw-bold mb-3">DataTables.Net</h3> --}}
       <ul class="breadcrumbs mb-3">
         <li class="nav-home">
-          <a href="/dasboard">
+          <a href="/dasboard/as">
             <i class="icon-home"></i>
           </a>
         </li>
@@ -19,13 +19,13 @@
           <i class="icon-arrow-right"></i>
         </li>
         <li class="nav-item">
-          <a href="#">Majors Management</a>
+          <a href="#">Assessor</a>
         </li>
         <li class="separator">
           <i class="icon-arrow-right"></i>
         </li>
         <li class="nav-item">
-          <a href="">Kelola Majors</a>
+          <a href="">Standar Kompetensi</a>
         </li>
       </ul>
     </div>
@@ -34,41 +34,70 @@
         <div class="card">
           <div class="card-header">
             <div class="d-flex align-items-center">
-                <h4 class="card-title me-auto">Majors</h4>
-                <a type="button" class="btn btn-primary ms-auto" href="/vaddmj">
-                    Add Majors
+                <h4 class="card-title me-auto">Standar Kompetensi</h4>
+                <a type="button" class="btn btn-primary ms-auto" href="/vaddst">
+                    Add standar
                 </a>
             </div>
           </div>
             <div class="table-responsive pt-3">
-              <table id="add-row" class="display table table-striped table-hover">
+              <table id="add-row" class="display table table-striped table-hover table-head-bg-black">
                 <thead>
                   <tr>
-                    <th>Major Name</th>
-                    <th>Description</th>
+                    <th>Unit Code</th>
+                    <th>Unit Title</th>
+                    <th>Unit Description</th>
+                    <th>Major</th>
+                    <th>Assessor</th>
                     <th style="width: 10%">Action</th>
                   </tr>
                 </thead>
                 <tfoot>
                   <tr>
-                    <th>Major Name</th>
-                    <th>Description</th>
+                    <th>Unit Code</th>
+                    <th>Unit Title</th>
+                    <th>Unit Description</th>
+                    <th>Major</th>
+                    <th>Assessor</th>
                     <th>Action</th>
                   </tr>
                 </tfoot>
                 <tbody>
-                    @foreach ($majors as $key => $item)
+                    @foreach ($standars as $key => $item)
                     <tr>
-                        <td>{{$item->major_name}}</td>
-                        <td>{{$item->description}}</td>
+                        <td>{{$item->unit_code}}</td>
+                        <td>{{$item->unit_title}}</td>
+                        <td>{{$item->unit_description}}</td>
+                        <td>{{$item->major->major_name}}</td>
+                        <td>{{$item->assessor->user->full_name}}</td>
                         <td>
+                            <!-- Dropdown Action -->
                             <div class="form-button-action">
-                                <a href="javascript:void(0)" class="btn btn-link btn-primary btn-lg" onclick="editItem({{ $item->id }})">
-                                    <i class="fa fa-edit"></i>
-                                </a>
-                                <a href="javascript:void(0)" class="btn btn-link btn-danger" onclick="deleteItem({{ $item->id }})">
-                                    <i class="fa fa-times"></i>
-                                </a>
+                                <div class="dropdown">
+                                    <button class="btn btn-primary dropdown-toggle" type="button" id="actionDropdown{{ $item->id }}" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Action
+                                    </button>
+                                    <ul class="dropdown-menu" aria-labelledby="actionDropdown{{ $item->id }}">
+                                        <!-- Tombol Detail -->
+                                        <li>
+                                            <a href="/detail/standar/{{ $item->id }}" class="dropdown-item">
+                                                <i class="fa fa-info-circle me-2"></i>Detail
+                                            </a>
+                                        </li>
+                                        <!-- Tombol Edit -->
+                                        <li>
+                                            <a href="/veditst/{{ $item->id }}" class="dropdown-item">
+                                                <i class="fa fa-edit me-2"></i>Edit
+                                            </a>
+                                        </li>
+                                        <!-- Tombol Delete -->
+                                        <li>
+                                            <a href="javascript:void(0)" class="dropdown-item text-danger" onclick="confirmDelete({{ $item->id }})">
+                                                <i class="fa fa-times me-2"></i>Delete
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
                             </div>
                         </td>
                     </tr>
@@ -81,57 +110,33 @@
       </div>
     </div>
 </div>
-
-<script src="{{ asset('assets/js/plugin/webfont/webfont.min.js') }}"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
+<script src="{{ asset('assets/js/plugin/webfont/webfont.min.js') }}"></script>
     <script>
-        function editItem(id) {
+        @if (session('success'))
         Swal.fire({
-            title: 'Are you sure?',
-            text: "You want to edit this major?",
-            icon: 'question',
-            showCancelButton: true,
-            confirmButtonText: 'Yes, edit it!',
-            cancelButtonText: 'No, cancel'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                // Redirect to the edit page
-                window.location.href = '/majors/edit/' + id;
-            }
+            title: 'Berhasil!',
+            text: "{{ session('success') }}",
+            icon: 'success',
+            confirmButtonText: 'OK'
         });
-    }
-
-    function deleteItem(id) {
+       @endif
+          function confirmDelete(id) {
         Swal.fire({
-            title: 'Are you sure?',
-            text: "You won't be able to revert this!",
+            title: 'Yakin hapus?',
+            text: "Data yang dihapus tidak bisa dikembalikan!",
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonText: 'Yes, delete it!',
-            cancelButtonText: 'No, keep it'
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Ya, hapus!'
         }).then((result) => {
             if (result.isConfirmed) {
-                // Redirect to the delete route
-                window.location.href = '/deletemj/' + id;
+                // Redirect ke route delete
+                window.location.href = `/delete/st/${id}`;
             }
         });
     }
-    // function deleteItem(id) {
-    //             Swal.fire({
-    //                 title: 'Are you sure?',
-    //                 text: "You won't be able to revert this!",
-    //                 icon: 'warning',
-    //                 showCancelButton: true,
-    //                 confirmButtonText: 'Yes, delete it!',
-    //                 cancelButtonText: 'No, keep it'
-    //             }).then((result) => {
-    //                 if (result.isConfirmed) {
-    //                     // Redirect to the delete route
-    //                     window.location.href = '/deletemj/' + id;
-    //                 }
-    //             });
-    //         }
       WebFont.load({
         google: { families: ["Public Sans:300,400,500,600,700"] },
         custom: {
@@ -147,6 +152,8 @@
           sessionStorage.fonts = true;
         },
       });
+
+
     </script>
     <script src="{{ asset('assets/js/custom.js') }}"></script>
     <script src="{{ asset('assets/js/core/jquery-3.7.1.min.js') }}"></script>
@@ -156,6 +163,7 @@
     <script src="{{ asset('assets/js/plugin/datatables/datatables.min.js') }}"></script>
     <script src="{{ asset('assets/js/kaiadmin.min.js') }}"></script>
     <script src="{{ asset('assets/js/setting-demo2.js') }}"></script>
+
     <script>
       $(document).ready(function () {
         $('#add-row').DataTable({
@@ -181,25 +189,5 @@
       });
     </script>
 
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script>
-    // SweetAlert2 Notification
-    @if (session('success'))
-        Swal.fire({
-            icon: 'success',
-            title: 'Success!',
-            text: '{{ session('success') }}',
-            timer: 3000,
-            showConfirmButton: false
-        });
-    @elseif (session('error'))
-        Swal.fire({
-            icon: 'error',
-            title: 'Error!',
-            text: '{{ session('error') }}',
-            timer: 3000,
-            showConfirmButton: false
-        });
-    @endif
-</script>
+
 @endsection

@@ -1,5 +1,11 @@
 @extends('template.template')
 @section('content')
+<link rel="stylesheet" href="{{ asset('assets/css/custom.css') }}">
+<link rel="stylesheet" href="{{ asset('assets/css/bootstrap.min.css') }}" />
+<link rel="stylesheet" href="{{ asset('assets/css/plugins.min.css') }}" />
+<link rel="stylesheet" href="{{ asset('assets/css/kaiadmin.min.css') }}" />
+<link rel="stylesheet" href="{{ asset('assets/css/demo.css') }}" />
+<link rel="icon" href="{{ asset('assets/img/kaiadmin/favicon.ico') }}" type="image/x-icon" />
 <div class="main p-3">
     <div class="page-header">
       {{-- <h3 class="fw-bold mb-3">DataTables.Net</h3> --}}
@@ -91,8 +97,39 @@
 </div>
 
 <script src="{{ asset('assets/js/plugin/webfont/webfont.min.js') }}"></script>
-    <script>
+<script src="{{ asset('assets/js/custom.js') }}"></script>
+<script src="{{ asset('assets/js/core/jquery-3.7.1.min.js') }}"></script>
+<script src="{{ asset('assets/js/core/popper.min.js') }}"></script>
+{{-- <script src="{{ asset('assets/js/core/bootstrap.min.js') }}"></script> --}}
+<script src="{{ asset('assets/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js') }}"></script>
+<script src="{{ asset('assets/js/plugin/datatables/datatables.min.js') }}"></script>
+<script src="{{ asset('assets/js/kaiadmin.min.js') }}"></script>
+<script src="{{ asset('assets/js/setting-demo2.js') }}"></script>
+<script>
+      $(document).ready(function () {
+        $('#add-row').DataTable({
+          pageLength: 5,
+        });
 
+        $('#addRowButton').click(function () {
+          var action = `
+            <td>
+              <div class="form-button-action">
+                <button class="btn btn-link btn-primary btn-lg"><i class="fa fa-edit"></i></button>
+                <button class="btn btn-link btn-danger"><i class="fa fa-times"></i></button>
+              </div>
+            </td>`;
+          $('#add-row').DataTable().row.add([
+            $('#addName').val(),
+            $('#addPosition').val(),
+            $('#addOffice').val(),
+            action,
+          ]).draw();
+          $('#addRowModal').modal('hide');
+        });
+      });
+    </script>
+    <script>
         function editItem(id) {
         Swal.fire({
             title: 'Are you sure?',
@@ -142,5 +179,12 @@
         },
       });
     </script>
-
+<script src="{{ asset('assets/js/custom.js') }}"></script>
+<script src="{{ asset('assets/js/core/jquery-3.7.1.min.js') }}"></script>
+<script src="{{ asset('assets/js/core/popper.min.js') }}"></script>
+{{-- <script src="{{ asset('assets/js/core/bootstrap.min.js') }}"></script> --}}
+<script src="{{ asset('assets/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js') }}"></script>
+<script src="{{ asset('assets/js/plugin/datatables/datatables.min.js') }}"></script>
+<script src="{{ asset('assets/js/kaiadmin.min.js') }}"></script>
+<script src="{{ asset('assets/js/setting-demo2.js') }}"></script>
 @endsection

@@ -6,6 +6,7 @@ namespace Database\Seeders;
 
 use App\Models\Assessor;
 use App\Models\Major;
+use App\Models\Student;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 
@@ -22,6 +23,18 @@ class DatabaseSeeder extends Seeder
         //     'name' => 'Test User',
         //     'email' => 'test@example.com',
         // ]);
+        Major::create([
+            'major_name' => 'RPL',
+            'description' => 'REKAYASA PERANGKAT LUNAK'
+        ]);
+        Major::create([
+            'major_name' => 'DKV',
+            'description' => 'DESAIN KOMUNIKASI VISUAL'
+        ]);
+        Major::create([
+            'major_name' => 'TKJ',
+            'description' => 'TEKNIK KOMPUTER JARINGAN'
+        ]);
         User::create([
             'full_name' => 'admin',
             'username' => 'admin1',
@@ -46,17 +59,22 @@ class DatabaseSeeder extends Seeder
 
             ]);
         }
-        Major::create([
-            'major_name' => 'RPL',
-            'description' => 'REKAYASA PERANGKAT LUNAK'
-        ]);
-        Major::create([
-            'major_name' => 'DKV',
-            'description' => 'DESAIN KOMUNIKASI VISUAL'
-        ]);
-        Major::create([
-            'major_name' => 'TKJ',
-            'description' => 'TEKNIK KOMPUTER JARINGAN'
-        ]);
+        $user = User::create([
+           'full_name' => 'Aditia',
+           'username' => 'Aditia123',
+           'email'=> 'aditia@gmail.com',
+           'password'=> bcrypt('1234'),
+           'phone_number'=> '0823323',
+           'role'=> 'student',
+       ]);
+        if ($user->role == 'student') {
+            Student::create([
+                'nisn' => '0001',
+                'grade_level' => '12',
+                'major_id' => '1',
+                'user_id' => '3',
+            ]);
+        }
+
     }
 }

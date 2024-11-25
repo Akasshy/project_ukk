@@ -1,4 +1,4 @@
-@extends('template.templateassessor')
+@extends('template.template')
 @section('content')
 <!-- Import CSS -->
 <link rel="stylesheet" href="{{ asset('assets/css/custom.css') }}">
@@ -47,7 +47,7 @@
                                 <th>Nama Siswa</th>
                                 <th>Final Score</th>
                                 <th>Status</th>
-                                {{-- <th>Action</th> --}}
+                                <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -64,43 +64,15 @@
 <script src="{{ asset('assets/js/plugin/webfont/webfont.min.js') }}"></script>
 <script src="{{ asset('assets/js/custom.js') }}"></script>
 <script src="{{ asset('assets/js/core/jquery-3.7.1.min.js') }}"></script>
->
-{{-- <script src="{{ asset('assets/js/core/bootstrap.min.js') }}"></script> --}}
-<script src="{{ asset('assets/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js') }}"></script>
 <script src="{{ asset('assets/js/plugin/datatables/datatables.min.js') }}"></script>
 <script src="{{ asset('assets/js/kaiadmin.min.js') }}"></script>
-<script src="{{ asset('assets/js/setting-demo2.js') }}"></script>
-<script>
-      $(document).ready(function () {
-        $('#results').DataTable({
-          pageLength: 5,
-        });
-
-        $('#addRowButton').click(function () {
-          var action = `
-            <td>
-              <div class="form-button-action">
-                <button class="btn btn-link btn-primary btn-lg"><i class="fa fa-edit"></i></button>
-                <button class="btn btn-link btn-danger"><i class="fa fa-times"></i></button>
-              </div>
-            </td>`;
-          $('#add-row').DataTable().row.add([
-            $('#addName').val(),
-            $('#addPosition').val(),
-            $('#addOffice').val(),
-            action,
-          ]).draw();
-          $('#addRowModal').modal('hide');
-        });
-      });
-    </script>
 <script>
     $(document).ready(function () {
         const dataTable = $('#results-table').DataTable({
             processing: true,
             serverSide: true,
             ajax: {
-                url: '/get-results', // Endpoint untuk data hasil
+                url: '/get-report', // Endpoint untuk data hasil
                 data: function (d) {
                     d.standar_id = $('#standar-select').val(); // Mengirim standar_id sebagai parameter
                 },
@@ -115,35 +87,35 @@
                     render: (data) => {
                         let badgeClass = '';
 
-                        // Tentukan warna badge sesuai dengan status
                         if (data === 'Sangat Kompeten') {
-                            badgeClass = 'bg-success';  // Hijau untuk sangat kompeten
+                            badgeClass = 'bg-success';
                         } else if (data === 'Kompeten') {
-                            badgeClass = 'bg-primary';  // Biru untuk kompeten
+                            badgeClass = 'bg-primary';
                         } else if (data === 'Cukup Kompeten') {
-                            badgeClass = 'bg-warning';  // Kuning untuk cukup kompeten
+                            badgeClass = 'bg-warning';
                         } else {
-                            badgeClass = 'bg-danger';  // Merah untuk belum kompeten
+                            badgeClass = 'bg-danger';
                         }
 
                         return `<span class="badge ${badgeClass}">${data}</span>`;
                     }
                 },
-                // {
-                //     data: 'action',
-                //     name: 'action',
-                //     orderable: false,
-                //     searchable: false,
-                //     render: function (data, type, row) {
-                //         return `
-                //             <div class="form-button-action">
-                //                 <a href="/menilai/${row.student_id}" class="btn btn-info btn-sm">
-                //                     <i class="fas fa-edit"></i> Detail
-                //                 </a>
-                //             </div>`;
-                //     },
-                // },
+                {
+                    data: 'action',
+                    name: 'action',
+                    orderable: false,
+                    searchable: false,
+                    render: function (data, type, row) {
+                        return `
+                            <div class="form-button-action">
+                                <a href="/detail/laporan/admin/${row.student_id}/${row.standar_id}" class="btn btn-info btn-sm">
+                                    <i class="fas fa-edit"></i> Detail
+                                </a>
+                            </div>`;
+                    },
+                },
             ],
+
         });
 
         // Event listener untuk dropdown standar
