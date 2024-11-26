@@ -89,12 +89,6 @@
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a href="/elements">
-                    <i class="fas fa-boxes"></i>
-                    <p>Elemen Kompetensi</p>
-                  </a>
-                </li>
-                <li class="nav-item">
                   <a href="/penilaians">
                     <i class="fas fa-pen-square"></i>
                     <p>Penilaian ujian </p>

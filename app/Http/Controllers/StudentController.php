@@ -6,7 +6,7 @@ use App\Models\CompetencyStandar;
 use App\Models\Examination;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-
+use Barryvdh\DomPDF\Facade\Pdf;
 class StudentController extends Controller
 {
     public function dasboard(){
@@ -130,5 +130,51 @@ class StudentController extends Controller
 
         return view('student.detailhasil', compact('details'));
     }
+    public function generatePDF(Request $request)
+{
+    $standar_id = $request->input('standar_id');
+
+    // Validasi apakah standar kompetensi ada
+    $standard = CompetencyStandar::where('id', $standar_id)->with('competency_elements')->first();
+    if (!$standard) {
+        return redirect()->back()->with('error', 'Standar kompetensi tidak ditemukan.');
+    }
+
+    // Ambil data ujian berdasarkan standar_id
+    $examinations = Examination::where('standar_id', $standar_id)->with(['student.user', 'elements'])->get();
+
+    // Proses data siswa
+    $students = $examinations->groupBy('student_id')->map(function ($exams) use ($standard) {
+        $totalElements = $standard->competency_elements->count();
+        $completedElements = $exams->where('status', 1)->unique('element_id')->count();
+
+        $finalScore = $totalElements > 0 ? round(($completedElements / $totalElements) * 100) : 0;
+
+        $status = match (true) {
+            $finalScore >= 91 => "Sangat Kompeten",
+            $finalScore >= 75 && $finalScore <= 90 => "Kompeten",
+            $finalScore >= 61 && $finalScore <= 74 => "Cukup Kompeten",
+            default => "Belum Kompeten",
+        };
+
+        $examElements = $exams->map(function ($exam) {
+            return [
+                'criteria' => $exam->element->criteria,
+                'status' => $exam->status == 1 ? 'Kompeten' : 'Belum Kompeten',
+            ];
+        });
+
+        return [
+            'student_name' => $exams->first()->student->user->full_name,
+            'final_score' => $finalScore,
+            'status' => $status,
+            'elements' => $examElements,
+        ];
+    });
+
+    $pdf = Pdf::loadView('student/sertificate', ['students' => $students, 'standard' => $standard]);
+    return $pdf->stream('HasilUjian.pdf');
+}
+
 
 }

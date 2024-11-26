@@ -22,43 +22,42 @@ class AdminController extends Controller
         return view('admin/users/users',$users,);
     }
 
-   public function adduser(Request $request)
-{
-    try {
+   public function adduser(Request $request){
+        try {
 
-        $user = User::create([
-            'full_name' => $request->full_name,
-            'username' => $request->username,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-            'phone_number' => $request->phone_number,
-            'role' => $request->role,
-            'is_active' => 1,
-        ]);
+            $user = User::create([
+                'full_name' => $request->full_name,
+                'username' => $request->username,
+                'email' => $request->email,
+                'password' => Hash::make($request->password),
+                'phone_number' => $request->phone_number,
+                'role' => $request->role,
+                'is_active' => 1,
+            ]);
 
-        // Tambahkan data ke tabel terkait
-        if ($user->role === 'student') {
-            Student::create([
-                'user_id' => $user->id,
-                'nisn' => $request->nisn,
-                'grade_level' => $request->grade_level,
-                'major_id' => $request->major_id,
-            ]);
-        } elseif ($user->role === 'assessor') {
-            Assessor::create([
-                'user_id' => $user->id,
-                'assessor_type' => $request->assessor_type,
-                'description' => $request->description,
-            ]);
+            // Tambahkan data ke tabel terkait
+            if ($user->role === 'student') {
+                Student::create([
+                    'user_id' => $user->id,
+                    'nisn' => $request->nisn,
+                    'grade_level' => $request->grade_level,
+                    'major_id' => $request->major_id,
+                ]);
+            } elseif ($user->role === 'assessor') {
+                Assessor::create([
+                    'user_id' => $user->id,
+                    'assessor_type' => $request->assessor_type,
+                    'description' => $request->description,
+                ]);
+            }
+
+            // Jika berhasil, kirimkan flash session dan arahkan
+            return redirect('/users')->with('success', 'User telah di tambahkan!');
+        } catch (\Exception $e) {
+            // Jika terjadi kesalahan, kirimkan flash session error
+            return redirect('/users')->with('error', 'User gagal di tambahkan, silahkan ulangi lagi.');
         }
-
-        // Jika berhasil, kirimkan flash session dan arahkan
-        return redirect('/users')->with('success', 'User telah di tambahkan!');
-    } catch (\Exception $e) {
-        // Jika terjadi kesalahan, kirimkan flash session error
-        return redirect('/users')->with('error', 'User gagal di tambahkan, silahkan ulangi lagi.');
     }
-}
 
     public function viewadduser(){
         $majors['majors'] = Major::all();

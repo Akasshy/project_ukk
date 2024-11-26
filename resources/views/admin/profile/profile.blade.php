@@ -32,8 +32,29 @@
                 </tbody>
             </table>
             <a href="/dasboard" class="btn btn-danger mt-3 me-4">Back</a>
-            <a href="/profile/edit/{{ $user->id }}" class="btn btn-primary mt-3">Edit Profil</a>
+            <a href="/profile/edit/admin/{{ $user->id }}" class="btn btn-primary mt-3">Edit Profil</a>
         </div>
     </div>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+@if(session('success'))
+<script>
+    Swal.fire({
+        icon: 'success',
+        title: 'Berhasil',
+        text: "{{ session('success') }}",
+    });
+</script>
+@endif
+
+@if(session('error'))
+<script>
+    Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: "{{ session('error') }}",
+    });
+</script>
+@endif
+
 @endsection

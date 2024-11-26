@@ -16,9 +16,9 @@
                 </a>
             </li>
             <li class="separator"><i class="icon-arrow-right"></i></li>
-            <li class="nav-item"><a href="#">Majors Management</a></li>
+            <li class="nav-item"><a href="/standars">Standar competency</a></li>
             <li class="separator"><i class="icon-arrow-right"></i></li>
-            <li class="nav-item"><a href="">Kelola Majors</a></li>
+            <li class="nav-item fw-bold"><a href="">Element competency</a></li>
         </ul>
     </div>
 
@@ -53,7 +53,7 @@
                                 <td>
                                     <div class="form-button-action">
                                         <!-- Tombol Edit -->
-                                        <button class="btn btn-link btn-primary" data-bs-toggle="modal" data-bs-target="#modalEdit{{ $item->id }}">
+                                        <button class="btn btn-link btn-primary" data-bs-toggle="modal" data-bs-target="#modalEditElement{{ $item->id }}">
                                             <i class="fa fa-edit"></i>
                                         </button>
                                         <!-- Tombol Hapus dengan SweetAlert -->
@@ -63,26 +63,50 @@
                                     </div>
                                 </td>
                             </tr>
-
-                            <!-- Modal Edit -->
-                            <div class="modal fade" id="modalEdit{{ $item->id }}" tabindex="-1" aria-hidden="true">
+                            <div class="modal fade" id="modalTambah" tabindex="-1" aria-hidden="true">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
                                         <div class="modal-header">
-                                            <h5 class="modal-title">Edit Element Competency</h5>
+                                            <h5 class="modal-title">Tambah Element Competency</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form action="/add/element" method="POST">
+                                                @csrf
+                                                <input type="text" style="display:none" name="competency_id" value="{{ $item->id }}">
+                                                <div class="mb-3">
+                                                    <label for="criteria" class="form-label">Criteria</label>
+                                                    <textarea name="criteria" class="form-control" id="criteria" rows="4" required></textarea>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="submit" class="btn btn-primary">Simpan</button>
+                                                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Tutup</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Modal Edit -->
+                            <div class="modal fade" id="modalEditElement{{ $item->id }}" tabindex="-1" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title">Edit Element</h5>
                                             <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                                         </div>
                                         <div class="modal-body">
                                             <form action="/update/element/{{ $item->id }}" method="POST">
                                                 @csrf
                                                 @method('PUT')
+                                                <input type="hidden" name="competency_id" value="{{ $item->id }}">
                                                 <div class="mb-3">
                                                     <label for="criteria" class="form-label">Criteria</label>
                                                     <textarea name="criteria" class="form-control" id="criteria" rows="4" required>{{ $item->criteria }}</textarea>
                                                 </div>
                                                 <div class="modal-footer">
                                                     <button type="submit" class="btn btn-primary">Update</button>
-                                                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Tutup</button>
+                                                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
                                                 </div>
                                             </form>
                                         </div>

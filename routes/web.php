@@ -19,42 +19,20 @@ use Illuminate\Support\Facades\Route;
 
 
 
+
+Route::middleware('guest')->group(function () {
+Route::post('/login',[AuthController::class,'login']);
 Route::get('/', function () {
     return view('login');
+    });
+
 });
-Route::get('/dasboard/st', function () {
-    return view('student.dasboardst');
-});
-// Route::get('/tes', function () {
-//     return view('assessor/standar/addstandar');
-// });
-// Route::get('/standar', function () {
-//     return view('assessor/standar/standarkom');
-// });
-// Route::get('/coba', function () {
-//     return view('admin/adduser');
-// });
-
-//\
-
-
-//Auth
-Route::post('/login',[AuthController::class,'login']);
-//Admin
-
-//end amin
-
-//ASSESOR
-
-//student
-
-
-
+Route::get('/logout',[AuthController::class,'logout']);
 
 Route::middleware(['role:admin'])->group(function () {
     Route::get('/profile/admin',[AuthController::class,'profile']);
     Route::get('/profile/edit/admin/{id}',[AuthController::class,'editprofile']);
-    Route::get('/profile/update/admin/{id}',[AuthController::class,'editprofile']);
+    Route::post('/profile/update/admin/{id}',[AuthController::class,'updateProfile']);
 
     Route::get('/dasboard',[AdminController::class,'dasboard']);
     Route::get('/users',[AdminController::class,'users']);
@@ -75,7 +53,6 @@ Route::middleware(['role:admin'])->group(function () {
     Route::get('/majors/edit/{id}', [AdminController::class, 'edit']);
     Route::get('/deletemj/{id}',[AdminController::class,'deletemj']);
     Route::put('/majors/{id}/update', [AdminController::class, 'update']);
-    Route::get('/logout',[AuthController::class,'logout']);
 
     //laporan
     Route::get('/hasil-ujian', [AdminController::class, 'report']);
@@ -86,11 +63,10 @@ Route::middleware(['role:admin'])->group(function () {
 Route::middleware(['role:assessor'])->group(function () {
 
     Route::get('/dasboard/as',[AssessorController::class,'dasboard']);
-    Route::get('/logout',[AuthController::class,'logout']);
 
     Route::get('/profile/assessor',[AuthController::class,'profile']);
     Route::get('/profile/edit/assessor/{id}',[AuthController::class,'editprofile']);
-    Route::get('/profile/update/assessor/{id}',[AuthController::class,'editprofile']);
+    Route::post('/profile/update/assessor/{id}',[AuthController::class,'updateProfile']);
 
     //STANDAR
     Route::get('/standars',[AssessorController::class,'standars']);
@@ -127,14 +103,15 @@ Route::middleware(['role:assessor'])->group(function () {
 
 Route::middleware(['role:student'])->group(function () {
     Route::get('/profile/student',[AuthController::class,'profile']);
-    Route::get('/profile/edit/assessor/{id}',[AuthController::class,'editprofile']);
-    Route::get('/profile/update/assessor/{id}',[AuthController::class,'editprofile']);
+    Route::get('/profile/edit/student/{id}',[AuthController::class,'editprofile']);
+    Route::post('/profile/update/student/{id}',[AuthController::class,'updateProfile']);
 
     Route::get('/dasboard/st',[StudentController::class,'dasboard']);
-    Route::get('/logout',[AuthController::class,'logout']);
     Route::get('/hasil/ujian/siswa', [StudentController::class, 'report']);
     Route::get('/get-resultst', [ StudentController::class, 'getReport']);
     Route::get('/detail/laporan/student/{student_id}/{standar_id}',[StudentController::class,'detailLaporan']);
+
+    Route::get('/generate/pdf', [StudentController::class, 'generatePDF'])->name('generate.pdf');
 
 
 });

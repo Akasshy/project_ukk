@@ -33,8 +33,8 @@
                         </option>
                     @endforeach
                 </select>
-                <button id="generate-btn" class="btn btn-success w-25">
-                    <i class="icon-printer"></i> Generate Report
+                <button id="generate-pdf" class="btn btn-success w-25 ms-2">
+                    <i class="icon-file-pdf"></i> Cetak PDF
                 </button>
             </div>
         </div>
@@ -61,6 +61,45 @@
 
 <script src="{{ asset('assets/js/core/jquery-3.7.1.min.js') }}"></script>
 <script>
+    $('#generate-pdf').on('click', function () {
+        const standarId = $('#standar-select').val();
+
+        // Perform an AJAX request to get the results and check if any student has a score <= 60
+        $.ajax({
+            url: '/get-resultst',
+            method: 'GET',
+            data: { standar_id: standarId },
+            success: function (response) {
+                // Check if there's any student with a score <= 60
+                const hasLowScore = response.data.some(result => result.final_score <= 60);
+
+                if (hasLowScore) {
+                    // Show SweetAlert notification
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Gagal!',
+                        text: 'Tidak bisa mencetak PDF karena ada siswa dengan skor kurang dari atau sama dengan 60.',
+                        timer: 3000,
+                        showConfirmButton: false
+                    });
+                } else {
+                    // If no student has a low score, proceed to generate PDF
+                    const pdfUrl = `/generate/pdf?standar_id=${standarId}`;
+                    window.location.href = pdfUrl;
+                }
+            },
+            error: function () {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Gagal!',
+                    text: 'Terjadi kesalahan saat memuat data.',
+                    timer: 3000,
+                    showConfirmButton: false
+                });
+            }
+        });
+    });
+
     $(document).ready(function () {
         function loadResults() {
             const standarId = $('#standar-select').val();
@@ -137,14 +176,7 @@
         // Event listener untuk dropdown
         $('#standar-select').on('change', loadResults);
 
-        // Tombol Generate Report
-        $('#generate-btn').on('click', function () {
-            const standarId = $('#standar-select').val();
-            const generateUrl = `/generate/report?standar_id=${standarId}`;
-
-            window.location.href = generateUrl;
-        });
-
+        // Notifikasi untuk session success atau error
         @if (session('success'))
             Swal.fire({
                 icon: 'success',

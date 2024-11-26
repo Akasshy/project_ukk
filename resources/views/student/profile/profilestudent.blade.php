@@ -1,4 +1,4 @@
-@extends('template.templateassessor')
+@extends('template.templatest')
 @section('content')
 <div class="container mt-5">
     <div class="card">
@@ -31,21 +31,25 @@
                     </tr>
                 </tbody>
             </table>
+            <h5 class="card-title mt-4">Detail Siswa</h5>
             <table class="table table-bordered">
-                    <h5 class="card-title mt-4">Detail Assessor</h5>
-                    <tbody>
-                        <tr>
-                            <th style="width: 36%">Type</th>
-                            <td>{{ $assessor->assessor_type }}</td>
-                        </tr>
-                        <tr>
-                            <th>Deskripsi</th>
-                            <td>{{ $assessor->description }}</td>
-                        </tr>
-                    </tbody>
-                </table>
-            <a href="/dasboard/as" class="btn btn-danger mt-3 me-4">Back</a>
-            <a href="/profile/edit/assessor/{{ $user->id }}" class="btn btn-primary mt-3">Edit Profil</a>
+                <tbody>
+                    <tr>
+                        <th style="width: 36%">NISN</th>
+                        <td>{{ $student->nisn }}</td>
+                    </tr>
+                    <tr>
+                        <th>Tingkat Kelas</th>
+                        <td>{{ $student->grade_level }}</td>
+                    </tr>
+                    <tr>
+                        <th>Jurusan</th>
+                        <td>{{ $student->major->major_name ?? 'N/A' }}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <a href="/dasboard/st" class="btn btn-danger mt-3 me-4">Back</a>
+            <a href="/profile/edit/student/{{ $user->id }}" class="btn btn-primary mt-3">Edit Profil</a>
         </div>
     </div>
 </div>
@@ -69,4 +73,5 @@
     });
 </script>
 @endif
+
 @endsection

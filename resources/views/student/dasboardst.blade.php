@@ -1,8 +1,7 @@
 @extends('template.templatest')
 @section('content')
-@if (session('user_name'))
+@if (session('user_name') && Auth::user()->role === 'student')
 <script>
-    // Menampilkan SweetAlert dengan pesan selamat datang
     Swal.fire({
         icon: 'success',
         title: 'Selamat Datang',
@@ -10,6 +9,7 @@
     });
 </script>
 @endif
+
     <div class="page-inner">
       <div
         class="d-flex align-items-left align-items-md-center flex-column flex-md-row pt-2 pb-4"

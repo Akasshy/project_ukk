@@ -302,7 +302,7 @@ class AssessorController extends Controller
                 $status = "Sangat Kompeten";
             }elseif ($finalScore >= 75 && $finalScore <= 90) {
                 $status = "Kompeten";
-            }elseif ($finalScore >= 61 && $finalScore <= 74) {
+            }elseif ($finalScore >= 61 && $finalScore <= 74) { 
                 $status = "Cukup Kompeten";
             }else{
                 $status = "Belum Kompeten";

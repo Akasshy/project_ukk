@@ -1,4 +1,4 @@
-@extends('template.template')
+@extends('template.templatest')
 @section('content')
 <div class="container mt-5">
     <div class="card">
@@ -6,7 +6,7 @@
             <h3>Edit Profil</h3>
         </div>
         <div class="card-body">
-            <form action="/profile/update/admin/{{ $user->id }}" method="POST">
+            <form action="/profile/update/student/{{ $user->id }}" method="POST">
                 @csrf
                 <div class="mb-3">
                     <label for="full_name" class="form-label">Nama Lengkap</label>
@@ -33,7 +33,7 @@
                     <input type="password" class="form-control" id="password_confirmation" name="password_confirmation">
                 </div>
                 <button type="submit" class="btn btn-success">Simpan Perubahan</button>
-                <a href="/profile/admin" class="btn btn-secondary">Kembali</a>
+                <a href="/profile/student" class="btn btn-secondary">Kembali</a>
             </form>
         </div>
     </div>

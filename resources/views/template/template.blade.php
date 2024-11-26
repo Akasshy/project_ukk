@@ -134,8 +134,14 @@
                   </div>
                 </li>
                 <li class="nav-item">
+                  <a  href="#laporan">
+                    <i class="fas fa-clipboard"></i>
+                    <p>Standar Competency</p>
+                  </a>
+                </li>
+                <li class="nav-item">
                   <a data-bs-toggle="collapse" href="#laporan">
-                    <i class="fas fa-pen-square"></i>
+                    <i class="fas fa-clipboard-list"></i>
                     <p>Laporan</p>
                     <span class="caret"></span>
                   </a>
