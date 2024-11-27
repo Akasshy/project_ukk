@@ -35,7 +35,7 @@
           <div class="card-header">
             <div class="d-flex align-items-center">
                 <h4 class="card-title me-auto">Standar Kompetensi</h4>
-                <a type="button" class="btn btn-primary ms-auto" href="/vaddst">
+                <a type="button" class="btn btn-primary ms-auto" href="/vaddst/admin">
                     Add standar
                 </a>
             </div>
@@ -133,7 +133,7 @@
         }).then((result) => {
             if (result.isConfirmed) {
                 // Redirect ke route delete
-                window.location.href = `/delete/st/${id}`;
+                window.location.href = `/delete/st/admin/${id}`;
             }
         });
     }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Assessor;
+use App\Models\CompetencyElement;
 use App\Models\CompetencyStandar;
 use App\Models\Examination;
 use App\Models\Major;
@@ -204,6 +205,134 @@ class AdminController extends Controller
         return redirect('/majors')->with('success', 'Major updated successfully!');
     }
 
+    public function standars(Request $request)
+    {
+        $standars = CompetencyStandar::all();
+        return view('admin.competency.competencystandar', compact('standars'));
+    }
+
+    public function vaddst(){
+        $assessor = Assessor::all();
+        $majors = Major::all();
+        return view('admin.competency.addstandar', compact('majors','assessor'));
+    }
+    public function addst(Request $request){
+        $request->validate([
+            'unit_code' => 'required|string|max:32',
+            'unit_title' => 'required|string|max:64',
+            'unit_description' => 'required|string',
+            'major_id' => 'required|exists:majors,id',
+        ]);
+        CompetencyStandar::create([
+            'unit_code' => $request->unit_code,
+            'unit_title' => $request->unit_title,
+            'unit_description' => $request->unit_description,
+            'major_id' => $request->major_id,
+            'assessor_id' => $request->assessor_id
+        ]);
+        session()->flash('success', 'Data berhasil ditambahkan!');
+        return redirect('/admin/standars');
+    }
+
+    public function deletest(Request $request){
+        CompetencyStandar::where('id',$request->id)->delete();
+        session()->flash('success', 'Data berhasil dihapus!');
+        return redirect('/admin/standars');
+    }
+
+    public function editst($id)
+    {
+        // Ambil data competency standard berdasarkan ID
+        $competencyStandard = CompetencyStandar::findOrFail($id);
+        $majors = Major::all(); // Ambil daftar major
+
+        // Tampilkan view edit dengan data competency standard dan majors
+        return view('assessor/standar/editstandar', compact('competencyStandard', 'majors'));
+    }
+
+    public function updatest(Request $request, $id)
+    {
+        // Validasi data input
+        $request->validate([
+            'unit_code' => 'required|string|max:255',
+            'unit_title' => 'required|string|max:255',
+            'unit_description' => 'required|string',
+            'major_id' => 'required|exists:majors,id',
+        ]);
+
+        // Update data competency standard
+        $competencyStandard = CompetencyStandar::findOrFail($id);
+        $competencyStandard->update([
+            'unit_code' => $request->unit_code,
+            'unit_title' => $request->unit_title,
+            'unit_description' => $request->unit_description,
+            'major_id' => $request->major_id,
+        ]);
+
+        // Redirect dengan pesan sukses
+        session()->flash('success', 'Data berhasil diupdate!');
+        return redirect('/standars');
+    }
+
+    public function detailsStandar(Request $request,$id)
+    {
+
+        $standars = CompetencyElement::where('competency_id',$id)->get();
+        return view('assessor.standar.detailstandar', compact('standars'));
+    }
+    public function elements(Request $request)
+    {
+        $id = Auth::user()->assessor->id;
+
+        $standars = CompetencyStandar::with('elements')
+            ->where('assessor_id', $id)
+            ->get();
+
+        return view('assessor.element.elementskom', compact('standars'));
+    }
+
+    public function addelement(Request $request)
+    {
+        $request->validate([
+            'criteria' => 'required|string|max:255',
+            'competency_id' => 'required|exists:competency_standars,id',
+        ]);
+
+        // Simpan elemen baru
+        CompetencyElement::create([
+            'criteria' => $request->criteria,
+            'competency_id' => $request->competency_id,
+        ]);
+        session()->flash('success', 'Elemen berhasil di tambahkan');
+        // dd($request->all());
+        return redirect()->back();
+    }
+    public function updateElement(Request $request, $id)
+    {
+        $request->validate([
+            'criteria' => 'required|string|max:255',
+            'competency_id' => 'required|exists:competency_standars,id',
+        ]);
+
+        $element = CompetencyElement::findOrFail($id);
+        $element->update([
+            'criteria' => $request->criteria,
+            'competency_id' => $request->competency_id,
+        ]);
+
+        session()->flash('success', 'Elemen berhasil diperbarui!');
+        // Setelah operasi delete
+        return redirect()->back();
+    }
+    public function deleteele($id)
+    {
+
+        $element = CompetencyElement::findOrFail($id);
+        $element->delete();
+
+        return redirect()->back()->with('success', 'Element deleted successfully.');
+
+    }
     public function report(Request $request)
     {
         // $id = Auth::user()->assessor->id; // Pastikan relasi 'assessor' didefinisikan di model User

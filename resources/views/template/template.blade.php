@@ -134,7 +134,7 @@
                   </div>
                 </li>
                 <li class="nav-item">
-                  <a  href="#laporan">
+                  <a  href="/admin/standars">
                     <i class="fas fa-clipboard"></i>
                     <p>Standar Competency</p>
                   </a>

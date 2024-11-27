@@ -87,43 +87,43 @@ class AssessorController extends Controller
 
     public function detailsStandar(Request $request,$id)
     {
-
+        $id_st = CompetencyStandar::first()->id;
+        $name = CompetencyStandar::find($id)->unit_title;
         $standars = CompetencyElement::where('competency_id',$id)->get();
-        return view('assessor.standar.detailstandar', compact('standars'));
-    }
-    public function elements(Request $request)
-    {
-        $id = Auth::user()->assessor->id;
-
-        $standars = CompetencyStandar::with('elements')
-            ->where('assessor_id', $id)
-            ->get();
-
-        return view('assessor.element.elementskom', compact('standars'));
+        return view('assessor.standar.detailstandar', compact('standars','id_st','name'));
     }
 
-    public function addelement(Request $request)
+    public function vaddelement($id){
+
+        // $name = CompetencyStandar::find($id)->unit_title;
+        $competency_id = $id;
+        return view('assessor.standar.addelement',compact('competency_id',));
+    }
+    public function addelement(Request $request, $competency_id)
     {
+        // Validasi data input
         $request->validate([
-            'criteria' => 'required|string|max:255',
-            'competency_id' => 'required|exists:competency_standars,id',
+            'criteria.*' => 'required|string|max:255',
         ]);
 
-        // Simpan elemen baru
-        CompetencyElement::create([
-            'criteria' => $request->criteria,
-            'competency_id' => $request->competency_id,
-        ]);
-        session()->flash('success', 'Elemen berhasil di tambahkan');
-        // dd($request->all());
+        foreach ($request->criteria as $criteria) {
+            CompetencyElement::create([
+                'competency_id' => $competency_id,
+                'criteria' => $criteria,
+            ]);
+        }
+        session()->flash('success', 'Element berhasil ditambahkan.');
+
+        // Redirect kembali
         return redirect()->back();
     }
+
     public function updateElement(Request $request, $id)
     {
-        $request->validate([
-            'criteria' => 'required|string|max:255',
-            'competency_id' => 'required|exists:competency_standars,id',
-        ]);
+        // $request->validate([
+        //     'criteria' => 'required|string|max:255',
+        //     'competency_id' => 'required|exists:competency_standars,id',
+        // ]);
 
         $element = CompetencyElement::findOrFail($id);
         $element->update([
@@ -302,7 +302,7 @@ class AssessorController extends Controller
                 $status = "Sangat Kompeten";
             }elseif ($finalScore >= 75 && $finalScore <= 90) {
                 $status = "Kompeten";
-            }elseif ($finalScore >= 61 && $finalScore <= 74) { 
+            }elseif ($finalScore >= 61 && $finalScore <= 74) {
                 $status = "Cukup Kompeten";
             }else{
                 $status = "Belum Kompeten";

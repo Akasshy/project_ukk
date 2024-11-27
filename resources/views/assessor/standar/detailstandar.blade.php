@@ -21,16 +21,16 @@
             <li class="nav-item fw-bold"><a href="">Element competency</a></li>
         </ul>
     </div>
-
     <div class="row">
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
                     <div class="d-flex align-items-center">
-                        <h4 class="card-title me-auto">Element Competency</h4>
-                        <button type="button" class="btn btn-primary ms-auto" data-bs-toggle="modal" data-bs-target="#modalTambah">
+                        <h4 class="card-title me-auto">Element Competency : {{ $name }}</h4>
+                        {{-- <button type="button" class="btn btn-primary ms-auto" data-bs-toggle="modal" data-bs-target="#modalTambah">
                             Tambah Element
-                        </button>
+                        </button> --}}
+                        <a href="/vadd/element/{{ $id_st }}" class="btn btn-primary">Tambah</a>
                     </div>
                 </div>
                 <div class="table-responsive pt-3">
@@ -63,30 +63,6 @@
                                     </div>
                                 </td>
                             </tr>
-                            <div class="modal fade" id="modalTambah" tabindex="-1" aria-hidden="true">
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title">Tambah Element Competency</h5>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <form action="/add/element" method="POST">
-                                                @csrf
-                                                <input type="text" style="display:none" name="competency_id" value="{{ $item->id }}">
-                                                <div class="mb-3">
-                                                    <label for="criteria" class="form-label">Criteria</label>
-                                                    <textarea name="criteria" class="form-control" id="criteria" rows="4" required></textarea>
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="submit" class="btn btn-primary">Simpan</button>
-                                                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Tutup</button>
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
                             <!-- Modal Edit -->
                             <div class="modal fade" id="modalEditElement{{ $item->id }}" tabindex="-1" aria-hidden="true">
                                 <div class="modal-dialog">
@@ -98,7 +74,7 @@
                                         <div class="modal-body">
                                             <form action="/update/element/{{ $item->id }}" method="POST">
                                                 @csrf
-                                                @method('PUT')
+                                                {{-- @method('PUT') --}}
                                                 <input type="hidden" name="competency_id" value="{{ $item->id }}">
                                                 <div class="mb-3">
                                                     <label for="criteria" class="form-label">Criteria</label>
@@ -121,32 +97,6 @@
         </div>
     </div>
 </div>
-
-<!-- Modal Tambah -->
-<div class="modal fade" id="modalTambah" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Tambah Element Competency</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body">
-                <form action="/add/element" method="POST">
-                    @csrf
-                    <div class="mb-3">
-                        <label for="criteria" class="form-label">Criteria</label>
-                        <textarea name="criteria" class="form-control" id="criteria" rows="4" required></textarea>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="submit" class="btn btn-primary">Simpan</button>
-                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Tutup</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-
 <script src="{{ asset('assets/js/plugin/webfont/webfont.min.js') }}"></script>
 <script>
     WebFont.load({
