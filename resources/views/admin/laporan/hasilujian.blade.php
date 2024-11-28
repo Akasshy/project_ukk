@@ -72,7 +72,7 @@
             processing: true,
             serverSide: true,
             ajax: {
-                url: '/get-reportt', // Endpoint untuk data hasil
+                url: '/get-report/admin', // Endpoint untuk data hasil
                 data: function (d) {
                     d.standar_id = $('#standar-select').val(); // Mengirim standar_id sebagai parameter
                 },
@@ -111,9 +111,13 @@
                                 <a href="/detail/laporan/admin/${row.student_id}/${row.standar_id}" class="btn btn-info btn-sm">
                                     <i class="fas fa-edit"></i> Detail
                                 </a>
+                                <a href="/generate-pdf/admin/${row.student_id}?standar_id=${row.standar_id}" class="btn btn-danger btn-sm ms-2">
+                                    <i class="fas fa-file-pdf"></i> Cetak PDF
+                                </a>
                             </div>`;
                     },
-                },
+                }
+
             ],
 
         });

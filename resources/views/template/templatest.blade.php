@@ -75,17 +75,8 @@
           <div class="sidebar-content">
             <ul class="nav nav-secondary">
                 <li class="nav-item">
-                  <a
-                    href="/dasboard/st"
-                  >
-                    <i class="fas fa-home"></i>
-                    <p>Dashboard</p>
-                  </a>
-
-                </li>
-                <li class="nav-item">
                   <a href="/hasil/ujian/siswa">
-                    <i class="fas fa-box-open"></i>
+                    <i class="fas fa-home"></i>
                     <p>Hasil Ujian</p>
                   </a>
                 </li>

@@ -1,4 +1,4 @@
-@extends('template.templateassessor')
+@extends('template.template')
 @section('content')
 <link rel="stylesheet" href="{{ asset('assets/css/custom.css') }}">
 <link rel="stylesheet" href="{{ asset('assets/css/bootstrap.min.css') }}" />
@@ -6,7 +6,6 @@
 <link rel="stylesheet" href="{{ asset('assets/css/kaiadmin.min.css') }}" />
 <link rel="stylesheet" href="{{ asset('assets/css/demo.css') }}" />
 <link rel="icon" href="{{ asset('assets/img/kaiadmin/favicon.ico') }}" type="image/x-icon" />
-
 <div class="main p-3">
     <div class="page-header">
         <ul class="breadcrumbs mb-3">
@@ -27,7 +26,7 @@
                 <div class="card-header">
                     <div class="d-flex align-items-center">
                         <h4 class="card-title me-auto">Element Competency : {{ $name }}</h4>
-                        <a href="/vadd/element/{{ $id_st }}" class="btn btn-primary">Tambah</a>
+                        <a href="/vadd/element/admin/{{ $id_st }}" class="btn btn-primary">Tambah</a>
                     </div>
                 </div>
                 <div class="table-responsive pt-3">
@@ -53,7 +52,7 @@
                                         {{-- <button class="btn btn-link btn-primary" data-bs-toggle="modal" data-bs-target="#modalEditElement{{ $item->id }}">
                                             <i class="fa fa-edit"></i>
                                         </button> --}}
-                                        <a href="/edit/element/{{ $item->id }}" class="btn btn-primary btn-link">
+                                        <a href="/edit/element/admin/{{ $item->id }}" class="btn btn-primary btn-link">
                                             <i class="fa fa-edit"></i>
                                         </a>
                                         <!-- Tombol Hapus dengan SweetAlert -->
@@ -139,7 +138,7 @@
         }).then((result) => {
             if (result.isConfirmed) {
                 // Redirect ke route delete
-                window.location.href = `/delete/element/${id}`;
+                window.location.href = `/delete/element/admin${id}`;
             }
         });
     }

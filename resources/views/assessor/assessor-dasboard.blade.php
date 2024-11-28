@@ -1,12 +1,28 @@
 @extends('template/templateassessor')
 @section('content')
-@if (session('user_name'))
+
+@if (session('success'))
 <script>
-    // Menampilkan SweetAlert dengan pesan selamat datang
     Swal.fire({
         icon: 'success',
-        title: 'Selamat Datang',
-        text: 'Selamat datang, {{ session('user_name') }}',
+        title: 'Berhasil!',
+        text: '{{ session('success') }}',
+        timer: 3000,
+        timerProgressBar: true,
+        showConfirmButton: false
+    });
+</script>
+@endif
+
+@if (session('error'))
+<script>
+    Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: '{{ session('error') }}',
+        timer: 3000,
+        timerProgressBar: true,
+        showConfirmButton: false
     });
 </script>
 @endif
@@ -16,10 +32,6 @@
       >
         <div>
           <h3 class="fw-bold mb-3">Dashboard</h3>
-        </div>
-        <div class="ms-md-auto py-2 py-md-0">
-          <a href="#" class="btn btn-label-info btn-round me-2">Manage</a>
-          <a href="#" class="btn btn-primary btn-round">Add Customer</a>
         </div>
       </div>
       <div class="row">
@@ -36,8 +48,8 @@
                 </div>
                 <div class="col col-stats ms-3 ms-sm-0">
                   <div class="numbers">
-                    <p class="card-category">Visitors</p>
-                    <h4 class="card-title">1,294</h4>
+                    <p class="card-category">Competency Standar</p>
+                    <h4 class="card-title">{{ $st }}</h4>
                   </div>
                 </div>
               </div>
@@ -57,15 +69,15 @@
                 </div>
                 <div class="col col-stats ms-3 ms-sm-0">
                   <div class="numbers">
-                    <p class="card-category">Subscribers</p>
-                    <h4 class="card-title">1303</h4>
+                    <p class="card-category">Competency Element</p>
+                    <h4 class="card-title">{{ $el }}</h4>
                   </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-        <div class="col-sm-6 col-md-3">
+        {{-- <div class="col-sm-6 col-md-3">
           <div class="card card-stats card-round">
             <div class="card-body">
               <div class="row align-items-center">
@@ -107,7 +119,7 @@
             </div>
           </div>
         </div>
-      </div>
+      </div> --}}
       <div class="row">
 
       </div>

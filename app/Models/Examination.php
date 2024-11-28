@@ -31,7 +31,7 @@ class Examination extends Model
         return $this->belongsTo(CompetencyElement::class, 'element_id');
     }
     public function elements()
-{
-    return $this->hasMany(CompetencyElement::class, 'id', 'element_id');
-}
+    {
+        return $this->hasMany(CompetencyElement::class, 'id', 'element_id');
+    }
 }

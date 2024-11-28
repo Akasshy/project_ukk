@@ -117,6 +117,7 @@ class StudentController extends Controller
             'student_name' => $student->user->full_name,
             'final_score' => $finalScore,
             'status' => $status,
+            'standar_id' => $standar_id
         ];
 
         // Respons ke DataTables
@@ -132,6 +133,8 @@ class StudentController extends Controller
             ->where('standar_id', $standar_id)
             ->get();
 
+
+
         if ($details->isEmpty()) {
             return redirect()->back()->with('error', 'Data tidak ditemukan.');
         }
@@ -140,6 +143,7 @@ class StudentController extends Controller
     }
     public function generatePDF(Request $request)
     {
+
         $standar_id = $request->input('standar_id');
         $logged_in_student_id = Auth::user()->student->id; // Ambil ID siswa dari user yang login
 
@@ -191,7 +195,7 @@ class StudentController extends Controller
 
         // Generate PDF
         $pdf = Pdf::loadView('student/sertificate', ['students' => $students, 'standard' => $standard]);
-        return $pdf->stream('HasilUjian.pdf');
+        return $pdf->download('HasilUjian.pdf');
     }
 
 

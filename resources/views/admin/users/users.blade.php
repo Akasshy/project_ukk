@@ -159,21 +159,21 @@
             text: '{{ session('success') }}',
         });
     @endif
-    @if (session('success'))
-        Swal.fire({
-            icon: 'success',
-            title: 'Success!',
-            text: '{{ session('success') }}',
-        });
-    @endif
+    // @if (session('success'))
+    //     Swal.fire({
+    //         icon: 'success',
+    //         title: 'Success!',
+    //         text: '{{ session('success') }}',
+    //     });
+    // @endif
 
-    @if (session('error'))
-        Swal.fire({
-            icon: 'error',
-            title: 'Oops...',
-            text: '{{ session('error') }}',
-        });
-    @endif
+    // @if (session('error'))
+    //     Swal.fire({
+    //         icon: 'error',
+    //         title: 'Oops...',
+    //         text: '{{ session('error') }}',
+    //     });
+    // @endif
       WebFont.load({
         google: { families: ["Public Sans:300,400,500,600,700"] },
         custom: {
@@ -190,6 +190,28 @@
         },
       });
     </script>
+<!-- SweetAlert 2 CDN -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+    @if(session('success'))
+        Swal.fire({
+            icon: 'success',
+            title: 'Success!',
+            text: '{{ session('success') }}',
+            timer: 3000,
+            showConfirmButton: false
+        });
+    @elseif(session('error'))
+        Swal.fire({
+            icon: 'error',
+            title: 'Error!',
+            text: '{{ session('error') }}',
+            timer: 3000,
+            showConfirmButton: false
+        });
+    @endif
+</script>
 
 <script>
     $(document).ready(function () {

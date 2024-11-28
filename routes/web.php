@@ -47,7 +47,7 @@ Route::middleware(['role:admin'])->group(function () {
     Route::get('/user/delete/{id}',[AdminController::class,'deleteuser']);
 
     //majors
-    Route::get('/majors',[AdminController::class,'majors']);
+    Route::get('/admin/majors',[AdminController::class,'majors']);
     Route::get('/vaddmj',[AdminController::class,'viewaddmajors']);
     Route::post('/add/majors',[AdminController::class,'addmajors']);
     Route::get('/majors/edit/{id}', [AdminController::class, 'edit']);
@@ -58,16 +58,22 @@ Route::middleware(['role:admin'])->group(function () {
     Route::get('/admin/standars',[AdminController::class,'standars']);
     Route::get('/vaddst/admin',[AdminController::class,'vaddst']);
     Route::post('/addst/admin',[AdminController::class,'addst']);
-    Route::get('/detail/standar/admin/{id}',[AdminController::class,'detailsStandar']);
     // Route untuk edit competency standard
-    Route::get('/veditst/{id}', [AdminController::class, 'edit']);
-    Route::post('/updatest/{id}', [AdminController::class, 'update']);
+    Route::get('/veditst/admin/{id}', [AdminController::class, 'editst']);
+    Route::post('/updatest/admin/{id}', [AdminController::class, 'updatest']);
     Route::get('/delete/st/admin/{id}',[AdminController::class,'deletest']);
-
+    Route::get('/detail/standar/admin/{id}',[AdminController::class,'detailsStandar']);
+    Route::get('/vadd/element/admin/{id}',[AdminController::class,'vaddelement']);
+    Route::post('/add/element/admin/{competency_id}',[AdminController::class,'addelement']);
+    Route::get('/delete/element/admin{id}', [AdminController::class, 'deleteele']);
+    Route::get('/edit/element/admin/{id}', [AdminController::class, 'editelement'])->name('edit.element');
+    Route::patch('/update/element/admin/{id}', [AdminController::class, 'updateElement']);
     //laporan
     Route::get('/hasil-ujian', [AdminController::class, 'report']);
-    Route::get('/get-reportt', [AdminController::class, 'getReport']);
+    Route::get('/get-report/admin', [AdminController::class, 'getReport']);
     Route::get('/detail/laporan/admin/{student_id}/{standar_id}',[AdminController::class,'detailLaporan']);
+    Route::get('/generate-pdf/admin/{id}', [AdminController::class, 'generatePDF']);
+
 });
 
 Route::middleware(['role:assessor'])->group(function () {
@@ -113,6 +119,8 @@ Route::middleware(['role:assessor'])->group(function () {
     Route::get('/laporan-hasil-ujian', [AssessorController::class, 'report']);
     Route::get('/get-report', [AssessorController::class, 'getReport']);
     Route::get('/detail/laporan/{student_id}/{standar_id}',[AssessorController::class,'detailLaporan']);
+    Route::get('/generate-pdf/assessor/{id}', [AssessorController::class, 'generatePDF']);
+
 
 });
 

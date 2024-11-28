@@ -7,15 +7,37 @@ use App\Models\CompetencyStandar;
 use App\Models\Examination;
 use App\Models\Major;
 use App\Models\Student;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class AssessorController extends Controller
 {
 
-    public function dasboard(){
-        return view('assessor.assessor-dasboard');
+    public function dasboard()
+    {
+        $id = Auth::user()->assessor->id;  // Mendapatkan ID assessor dari pengguna yang sedang login
+
+        // Ambil kompetensi standar yang terkait dengan assessor
+        $idst = CompetencyStandar::where('assessor_id', $id)->get();
+
+        // Hitung jumlah kompetensi standar
+        $st = $idst->count();
+
+        // Jika ada kompetensi standar, ambil ID dari kompetensi standar pertama
+        $idstc = $idst->first()->id ?? null;  // Menggunakan null jika tidak ada kompetensi standar
+
+        // Ambil competency elements berdasarkan kompetensi standar yang ditemukan
+        $el = 0; // Defaultkan elemen ke 0 jika tidak ada kompetensi standar
+        if ($idstc) {
+            $idel = CompetencyElement::where('competency_id', $idstc)->get();
+            $el = $idel->count();
+        }
+
+        // Kembalikan ke view dengan data yang dibutuhkan
+        return view('assessor.assessor-dasboard', compact('st', 'el'));
     }
+
     public function standars(Request $request)
     {
         $id = Auth::user()->assessor->id;
@@ -464,6 +486,59 @@ class AssessorController extends Controller
 
         return view('assessor.laporan.detaillaporan', compact('details'));
     }
+    public function generatePDF(Request $request, $id)
+    {
+        $standar_id = $request->input('standar_id');
+        $student_id = $id; // Get the student ID from the URL
 
+        // Validate the competency standard
+        $standard = CompetencyStandar::where('id', $standar_id)->with('competency_elements')->first();
+        if (!$standard) {
+            return redirect()->back()->with('error', 'Standar kompetensi tidak ditemukan.');
+        }
+
+        // Get exam data for the specific student and standard
+        $examinations = Examination::where('standar_id', $standar_id)
+            ->where('student_id', $student_id)
+            ->with(['student.user', 'elements'])
+            ->get();
+
+        if ($examinations->isEmpty()) {
+            return redirect()->back()->with('error', 'Tidak ada data hasil ujian untuk siswa ini.');
+        }
+
+        // Process student exam results
+        $students = $examinations->groupBy('student_id')->map(function ($exams) use ($standard) {
+            $totalElements = $standard->competency_elements->count();
+            $completedElements = $exams->where('status', 1)->unique('element_id')->count();
+
+            $finalScore = $totalElements > 0 ? round(($completedElements / $totalElements) * 100) : 0;
+
+            $status = match (true) {
+                $finalScore >= 91 => "Sangat Kompeten",
+                $finalScore >= 75 && $finalScore <= 90 => "Kompeten",
+                $finalScore >= 61 && $finalScore <= 74 => "Cukup Kompeten",
+                default => "Belum Kompeten",
+            };
+
+            $examElements = $exams->map(function ($exam) {
+                return [
+                    'criteria' => $exam->element->criteria,
+                    'status' => $exam->status == 1 ? 'Kompeten' : 'Belum Kompeten',
+                ];
+            });
+
+            return [
+                'student_name' => $exams->first()->student->user->full_name,
+                'final_score' => $finalScore,
+                'status' => $status,
+                'elements' => $examElements,
+            ];
+        });
+
+        // Generate PDF
+        $pdf = Pdf::loadView('assessor/laporan/sertificateassessor', ['students' => $students, 'standard' => $standard]);
+        return $pdf->stream('HasilUjian.pdf');
+    }
 
 }

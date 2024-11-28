@@ -9,6 +9,8 @@ use App\Models\Examination;
 use App\Models\Major;
 use App\Models\Student;
 use App\Models\User;
+use Barryvdh\DomPDF\Facade\Pdf;
+use DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -16,7 +18,18 @@ use Illuminate\Support\Facades\Hash;
 class AdminController extends Controller
 {
     public function dasboard(){
-        return view('admin/admin-dasboard');
+        $user['all'] = User::all();
+        $ju = $user['all']->count();
+
+        $user['as'] = Assessor::all();
+        $ja = $user['as']->count();
+
+        $user['st'] = Student::all();
+        $jst = $user['st']->count();
+
+        $jrs = Major::all();
+        $mjr = $jrs->count();
+        return view('admin/admin-dasboard',compact('ju','ja','jst','mjr'));
     }
     public function users(){
         $users['users'] = User::all();
@@ -87,10 +100,28 @@ class AdminController extends Controller
 
 
 
-    public function deleteuser(Request $request){
-        User::where('id', $request->id)->delete();
-        return redirect('/users')->with('success',)->with('success', 'Delete User Berhasil!');
+    public function deleteuser(Request $request)
+    {
+        $userId = $request->id;
+
+        // Check if the user is associated with any examination as student or assessor
+        $isAssociated = Examination::where('student_id', $userId)
+                                   ->orWhere('assessor_id', $userId)
+                                   ->exists();
+
+        if ($isAssociated) {
+            // If the user is associated with an examination record, prevent deletion and show error message
+            return redirect('/users')->with('error', 'User cannot be deleted because they are associated with an examination record.');
+        }
+
+        // If no association is found, proceed to delete the user
+        User::where('id', $userId)->delete();
+
+        return redirect('/users')->with('success', 'Delete User Berhasil!');
     }
+
+
+
 
     public function editUser($id)
     {
@@ -125,6 +156,7 @@ class AdminController extends Controller
             'email' => $request->email,
             'phone_number' => $request->phone_number,
             'role' => $request->role,
+            'is_active' => $request->is_active,
             // Hanya ubah password jika diisi
             'password' => $request->password ? bcrypt($request->password) : $user->password,
         ]);
@@ -176,7 +208,7 @@ class AdminController extends Controller
 
     public function deletemj(Request $request){
         Major::where('id',$request->id)->delete();
-        return redirect('/majors')->with('success','')->with('success', 'Delete Major Berhasil!');
+        return redirect('/admin/majors')->with('success','')->with('success', 'Delete Major Berhasil!');
     }
 
     public function edit($id)
@@ -202,9 +234,9 @@ class AdminController extends Controller
             'description' => $request->description,
         ]);
 
-        return redirect('/majors')->with('success', 'Major updated successfully!');
+        return redirect('/admin/majors')->with('success', 'Major updated successfully!');
     }
-
+//standar
     public function standars(Request $request)
     {
         $standars = CompetencyStandar::all();
@@ -271,9 +303,34 @@ class AdminController extends Controller
 
         // Redirect dengan pesan sukses
         session()->flash('success', 'Data berhasil diupdate!');
-        return redirect('/standars');
+        return redirect('/admin/standars');
     }
 
+    public function vaddelement($id){
+
+        $competency_id = CompetencyStandar::find($id)->id;
+        // $competency_id = $id;
+
+        return view('admin.competency.addelement',compact('competency_id',));
+    }
+    public function addelement(Request $request, $competency_id)
+    {
+        // Validasi data input
+        $request->validate([
+            'criteria.*' => 'required|string|max:255',
+        ]);
+
+        foreach ($request->criteria as $criteria) {
+            CompetencyElement::create([
+                'competency_id' => $competency_id,
+                'criteria' => $criteria,
+            ]);
+        }
+        session()->flash('success', 'Element berhasil ditambahkan.');
+
+        // Redirect kembali
+        return redirect()->back();
+    }
     public function detailsStandar(Request $request,$id)
     {
         $competencyStandar = CompetencyStandar::findOrFail($id);
@@ -288,33 +345,39 @@ class AdminController extends Controller
         // Kirim data ke view
         return view('admin.competency.detailcompetency', compact('standars', 'id_st', 'name'));
     }
-    // public function elements(Request $request)
-    // {
-    //     $id = Auth::user()->assessor->id;
+    public function deleteele($id)
+    {
 
-    //     $standars = CompetencyStandar::with('elements')
-    //         ->where('assessor_id', $id)
-    //         ->get();
+        $element = CompetencyElement::findOrFail($id);
+        $element->delete();
 
-    //     return view('assessor.element.elementskom', compact('standars'));
-    // }
+        return redirect()->back()->with('success', 'Element deleted successfully.');
 
-    // public function addelement(Request $request)
-    // {
-    //     $request->validate([
-    //         'criteria' => 'required|string|max:255',
-    //         'competency_id' => 'required|exists:competency_standars,id',
-    //     ]);
+    }
+    public function editelement($id)
+    {
+        $element = CompetencyElement::findOrFail($id);
+        $standards = CompetencyStandar::all(); // Ambil semua standar kompetensi
+        return view('admin.competency.editelementad', compact('element', 'standards'));
+    }
 
-    //     // Simpan elemen baru
-    //     CompetencyElement::create([
-    //         'criteria' => $request->criteria,
-    //         'competency_id' => $request->competency_id,
-    //     ]);
-    //     session()->flash('success', 'Elemen berhasil di tambahkan');
-    //     // dd($request->all());
-    //     return redirect()->back();
-    // }
+    public function updateElement(Request $request, $id)
+    {
+        // $request->validate([
+        //     'criteria' => 'required|string|max:255',
+        //     'competency_id' => 'required|exists:competency_standars,id',
+        // ]);
+
+        $element = CompetencyElement::findOrFail($id);
+        $element->update([
+            'criteria' => $request->criteria,
+            'competency_id' => $request->competency_id,
+        ]);
+
+        session()->flash('success', 'Elemen berhasil diperbarui!');
+        // Setelah operasi delete
+        return redirect()->back();
+    }
     // public function updateElement(Request $request, $id)
     // {
     //     $request->validate([
@@ -331,15 +394,6 @@ class AdminController extends Controller
     //     session()->flash('success', 'Elemen berhasil diperbarui!');
     //     // Setelah operasi delete
     //     return redirect()->back();
-    // }
-    // public function deleteele($id)
-    // {
-
-    //     $element = CompetencyElement::findOrFail($id);
-    //     $element->delete();
-
-    //     return redirect()->back()->with('success', 'Element deleted successfully.');
-
     // }
     public function report(Request $request)
     {
@@ -457,6 +511,61 @@ class AdminController extends Controller
 
         return view('admin.laporan.detailhasilujian', compact('details'));
     }
+    public function generatePDF(Request $request, $id)
+    {
+        $standar_id = $request->input('standar_id');
+        $student_id = $id; // Get the student ID from the URL
+
+        // Validate the competency standard
+        $standard = CompetencyStandar::where('id', $standar_id)->with('competency_elements')->first();
+        if (!$standard) {
+            return redirect()->back()->with('error', 'Standar kompetensi tidak ditemukan.');
+        }
+
+        // Get exam data for the specific student and standard
+        $examinations = Examination::where('standar_id', $standar_id)
+            ->where('student_id', $student_id)
+            ->with(['student.user', 'elements'])
+            ->get();
+
+        if ($examinations->isEmpty()) {
+            return redirect()->back()->with('error', 'Tidak ada data hasil ujian untuk siswa ini.');
+        }
+
+        // Process student exam results
+        $students = $examinations->groupBy('student_id')->map(function ($exams) use ($standard) {
+            $totalElements = $standard->competency_elements->count();
+            $completedElements = $exams->where('status', 1)->unique('element_id')->count();
+
+            $finalScore = $totalElements > 0 ? round(($completedElements / $totalElements) * 100) : 0;
+
+            $status = match (true) {
+                $finalScore >= 91 => "Sangat Kompeten",
+                $finalScore >= 75 && $finalScore <= 90 => "Kompeten",
+                $finalScore >= 61 && $finalScore <= 74 => "Cukup Kompeten",
+                default => "Belum Kompeten",
+            };
+
+            $examElements = $exams->map(function ($exam) {
+                return [
+                    'criteria' => $exam->element->criteria,
+                    'status' => $exam->status == 1 ? 'Kompeten' : 'Belum Kompeten',
+                ];
+            });
+
+            return [
+                'student_name' => $exams->first()->student->user->full_name,
+                'final_score' => $finalScore,
+                'status' => $status,
+                'elements' => $examElements,
+            ];
+        });
+
+        // Generate PDF
+        $pdf = Pdf::loadView('admin/laporan/sertificateadmin', ['students' => $students, 'standard' => $standard]);
+        return $pdf->stream('HasilUjian.pdf');
+    }
+
 
 }
 

@@ -11,32 +11,59 @@ use Illuminate\Support\Facades\Auth;
 class AuthController extends Controller
 {
     public function login(Request $request)
-    {
-        $validatedData = $request->validate([
-            'email' => ['required', 'email'],
-            'password' => ['required'],
-        ]);
+{
+    // Validasi input
+    $validatedData = $request->validate([
+        'login' => ['required'], // Bisa berupa email atau username
+        'password' => ['required'],
+    ]);
 
-        if (Auth::attempt($validatedData)) {
-            $user = Auth::user();
-            session(['user_name' => $user->full_name]); // Menyimpan nama pengguna di session
+    // Tentukan apakah input login adalah email atau username
+    $loginType = filter_var($validatedData['login'], FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
 
-            if ($user->role == 'admin') {
-                return redirect('/dasboard');
-            } elseif ($user->role == 'assessor') {
-                return redirect('/dasboard/as');
-            } else {
-                return redirect('/dasboard/st');
-            }
+    // Autentikasi berdasarkan loginType
+    $credentials = [
+        $loginType => $validatedData['login'],
+        'password' => $validatedData['password'],
+    ];
+
+    if (Auth::attempt($credentials)) {
+        $user = Auth::user();
+
+        // Cek apakah user aktif
+        if ($user->is_active == 0) {
+            // Jika tidak aktif, logout dan tampilkan pesan
+            Auth::logout();
+            session()->flash('error', 'Akun Anda tidak aktif. Silakan hubungi administrator.');
+            return redirect()->back();
         }
-        return redirect()->back()->withErrors([
-            'error' => 'Email atau password salah. Silakan coba lagi.',
-        ]);
+
+        session(['user_name' => $user->full_name]);
+
+        // Simpan pesan berhasil ke session
+        session()->flash('success', 'Login berhasil! Selamat datang, ' . $user->full_name);
+
+        // Redirect berdasarkan role pengguna
+        if ($user->role == 'admin') {
+            return redirect('/dasboard');
+        } elseif ($user->role == 'assessor') {
+            return redirect('/dasboard/as');
+        } else {
+            return redirect('/hasil/ujian/siswa');
+        }
     }
 
+    // Jika login gagal, simpan pesan gagal ke session
+    session()->flash('error', 'Username/Email atau Password salah. Silakan coba lagi.');
 
-    public function logout(){
+    return redirect()->back();
+}
+
+
+    public function logout(Request $request){
         Auth::logout();
+        $request->session()->invalidate(); // Menghancurkan sesi
+        $request->session()->regenerateToken();
         return redirect('/');
     }
 

@@ -86,7 +86,7 @@
                                         </li>
                                         <!-- Tombol Edit -->
                                         <li>
-                                            <a href="/veditst/{{ $item->id }}" class="dropdown-item">
+                                            <a href="/veditst/admin/{{ $item->id }}" class="dropdown-item">
                                                 <i class="fa fa-edit me-2"></i>Edit
                                             </a>
                                         </li>

@@ -108,12 +108,15 @@
                     render: function (data, type, row) {
                         return `
                             <div class="form-button-action">
-                                <a href="/detail/laporan/${row.student_id}/${row.standar_id}" class="btn btn-info btn-sm">
+                                <a href="/detail/laporan/admin/${row.student_id}/${row.standar_id}" class="btn btn-info btn-sm">
                                     <i class="fas fa-edit"></i> Detail
+                                </a>
+                                <a href="/generate-pdf/assessor/${row.student_id}?standar_id=${row.standar_id}" class="btn btn-danger btn-sm ms-2">
+                                    <i class="fas fa-file-pdf"></i> Cetak PDF
                                 </a>
                             </div>`;
                     },
-                },
+                }
             ],
 
         });

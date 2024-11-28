@@ -11,29 +11,19 @@
 </head>
 <body>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body, html {
-            height: 100%;
-            background: linear-gradient(135deg, white, #6c5ce7, #1e1e2f);
+        body {
+            background: linear-gradient(135deg, #1e1e2f, #2c2c54);
             color: white;
             font-family: 'Arial', sans-serif;
         }
 
         .login-container {
             max-width: 700px;
-            margin: auto;
+            margin: 50px auto;
             padding: 20px;
             border-radius: 10px;
-            background-color: rgba(44, 44, 84, 0.95);
+            background-color: #2c2c54;
             box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.5);
-            position: relative;
-            top: 50%;
-            transform: translateY(-50%);
         }
 
         .login-header {
@@ -53,13 +43,13 @@
         }
 
         .form-control {
-            background-color: rgba(30, 30, 47, 0.9);
+            background-color: #1e1e2f;
             border: 1px solid #6c5ce7;
             color: white;
         }
 
         .form-control:focus {
-            background-color: rgba(30, 30, 47, 0.9);
+            background-color: #1e1e2f;
             border-color: #a29bfe;
             color: white;
             box-shadow: none;
@@ -117,8 +107,10 @@
         <form action="/login" method="post">
             @csrf
             <div class="mb-4">
-                <label for="email">Email</label>
-                <input type="email" id="email" name="email" class="form-control" placeholder="Masukkan Email" required>
+                {{-- <label for="email">Email</label>
+                <input type="email" id="email" name="email" class="form-control" placeholder="Masukkan Email" required> --}}
+                <label for="login">Username atau Email</label>
+                <input type="text" id="login" name="login" class="form-control" placeholder="Masukkan Username atau Email" required>
             </div>
             <div class="mb-4">
                 <label for="password">Password</label>
@@ -166,4 +158,3 @@
     </script>
 </body>
 </html>
- 

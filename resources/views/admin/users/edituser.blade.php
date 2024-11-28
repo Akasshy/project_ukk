@@ -56,6 +56,14 @@
                     <option value="assessor" {{ $user->role === 'assessor' ? 'selected' : '' }}>Assessor</option>
                 </select>
             </div>
+            <div class="mb-3">
+                <label for="is" class="form-label">Is Active</label>
+                <select class="form-select" id="is" name="is_active"  required >
+                    <option value="1" {{ $user->is_active === 1 ? 'selected' : '' }}>Aktif</option>
+                    <option value="0" {{ $user->is_active === 0 ? 'selected' : '' }}>Tidak Aktif</option>
+                </select>
+            </div>
+
             {{-- Role-Specific Fields --}}
             @if ($user->role == 'student')
 

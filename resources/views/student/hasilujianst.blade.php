@@ -6,6 +6,18 @@
 <link rel="stylesheet" href="{{ asset('assets/css/kaiadmin.min.css') }}">
 <link rel="stylesheet" href="{{ asset('assets/css/demo.css') }}">
 <link rel="icon" href="{{ asset('assets/img/kaiadmin/favicon.ico') }}" type="image/x-icon" />
+@if (session('login_success'))
+<script>
+    Swal.fire({
+        icon: 'success',
+        title: 'Selamat Datang',
+        text: 'Selamat datang, {{ session('user_name') }}',
+        timer: 3000,
+        timerProgressBar: true,
+        showConfirmButton: false
+    });
+</script>
+@endif
 
 <div class="main p-3">
     <div class="page-header">
@@ -71,22 +83,22 @@
             data: { standar_id: standarId },
             success: function (response) {
                 // Check if there's any student with a score <= 60
-                const hasLowScore = response.data.some(result => result.final_score <= 60);
+                // const hasLowScore = response.data.some(result => result.final_score <= 60);
 
-                if (hasLowScore) {
-                    // Show SweetAlert notification
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Gagal!',
-                        text: 'Tidak bisa mencetak PDF karena ada siswa dengan skor kurang dari atau sama dengan 60.',
-                        timer: 3000,
-                        showConfirmButton: false
-                    });
-                } else {
+                // if (hasLowScore) {
+                //     // Show SweetAlert notification
+                //     Swal.fire({
+                //         icon: 'error',
+                //         title: 'Gagal!',
+                //         text: 'Tidak bisa mencetak PDF karena ada siswa dengan skor kurang dari atau sama dengan 60.',
+                //         timer: 3000,
+                //         showConfirmButton: false
+                //     });
+                // } else {
                     // If no student has a low score, proceed to generate PDF
                     const pdfUrl = `/generate/pdf?standar_id=${standarId}`;
                     window.location.href = pdfUrl;
-                }
+                // }
             },
             error: function () {
                 Swal.fire({

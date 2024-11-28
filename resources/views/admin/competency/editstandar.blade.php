@@ -1,4 +1,4 @@
-@extends('template.templateassessor')
+@extends('template.template')
 @section('content')
 <div class="main m-4">
     <div class="page-header">
@@ -9,38 +9,46 @@
             <li class="separator"><i class="icon-arrow-right"></i></li>
             <li class="nav-item"><a href="/competency-standard">Competency Standards</a></li>
             <li class="separator"><i class="icon-arrow-right"></i></li>
-            <li class="nav-item"><a href="">Edit</a></li>
+            <li class="nav-item"><a href="">Update</a></li>
         </ul>
     </div>
     <div class="card bg-white p-5">
-        <form action="/updatest/{{$competencyStandard->id}}" method="post">
+        <form action="/update-st/competency-standard/{{ $competencyStandard->id }}" method="post">
             @csrf
-            <h4 class="text-primary fw-bold">Edit Competency Standard</h4>
+          <!-- Menambahkan metode PUT untuk pembaruan -->
+            <h4 class="text-primary fw-bold">Update Competency Standard</h4>
             <div class="mb-3">
                 <label for="unit_code" class="form-label">Unit Code</label>
-                <input type="text" class="form-control" id="unit_code" name="unit_code" value="{{ $competencyStandard->unit_code }}" required>
+                <input type="text" class="form-control" id="unit_code" name="unit_code" value="{{ old('unit_code', $competencyStandard->unit_code) }}" required>
             </div>
             <div class="mb-3">
                 <label for="unit_title" class="form-label">Unit Title</label>
-                <input type="text" class="form-control" id="unit_title" name="unit_title" value="{{ $competencyStandard->unit_title }}" required>
+                <input type="text" class="form-control" id="unit_title" name="unit_title" value="{{ old('unit_title', $competencyStandard->unit_title) }}" required>
             </div>
             <div class="mb-3">
                 <label for="unit_description" class="form-label">Unit Description</label>
-                <textarea class="form-control" id="unit_description" name="unit_description" rows="4" required>{{ $competencyStandard->unit_description }}</textarea>
+                <textarea class="form-control" id="unit_description" name="unit_description" rows="4" required>{{ old('unit_description', $competencyStandard->unit_description) }}</textarea>
             </div>
             <div class="mb-3">
                 <label for="major_id" class="form-label">Major</label>
                 <select class="form-select" id="major_id" name="major_id" required>
-                    <option value="" disabled>-- Select Major --</option>
+                    <option value="" disabled>Select Major</option>
                     @foreach($majors as $major)
-                        <option value="{{ $major->id }}" {{ $major->id == $competencyStandard->major_id ? 'selected' : '' }}>
-                            {{ $major->major_name }}
-                        </option>
+                        <option value="{{ $major->id }}" {{ $competencyStandard->major_id == $major->id ? 'selected' : '' }}>{{ $major->major_name }}</option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="assessor_id" class="form-label">Assessor</label>
+                <select class="form-select" id="assessor_id" name="assessor_id" required>
+                    <option value="" disabled>Select Assessor</option>
+                    @foreach($assessor as $item)
+                        <option value="{{ $item->id }}" {{ $competencyStandard->assessor_id == $item->id ? 'selected' : '' }}>{{ $item->user->full_name }}</option>
                     @endforeach
                 </select>
             </div>
             <button type="submit" class="btn btn-primary">Update</button>
-            <a href="/standars" class="btn btn-danger">Cancel</a>
+            <a href="/admin/standars" class="btn btn-danger">Cancel</a>
         </form>
     </div>
 </div>
