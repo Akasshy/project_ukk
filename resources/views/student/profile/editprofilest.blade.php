@@ -6,7 +6,7 @@
             <h3>Edit Profil</h3>
         </div>
         <div class="card-body">
-            <form action="/profile/update/student/{{ $user->id }}" method="POST">
+            <form action="/profile/update/student/as{{ $user->id }}" method="POST">
                 @csrf
                 <div class="mb-3">
                     <label for="full_name" class="form-label">Nama Lengkap</label>

@@ -5,18 +5,94 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Login</title>
-    <link rel="stylesheet" href="{{asset('assets/css/bootstrap.min.css')}}">
+    <link rel="stylesheet" href="{{ asset('assets/css/bootstrap.min.css') }}">
     <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
-    <!-- Tambahkan link untuk Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 </head>
 <body>
     <style>
-        body {
-            background-size: cover;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
-        .shadow-custom {
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+
+        body, html {
+            height: 100%;
+            background: linear-gradient(135deg, white, #6c5ce7, #1e1e2f);
+            color: white;
+            font-family: 'Arial', sans-serif;
+        }
+
+        .login-container {
+            max-width: 700px;
+            margin: auto;
+            padding: 20px;
+            border-radius: 10px;
+            background-color: rgba(44, 44, 84, 0.95);
+            box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.5);
+            position: relative;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .login-header h1 {
+            font-size: 24px;
+            color: #a29bfe;
+            margin-bottom: 10px;
+        }
+
+        .login-header p {
+            font-size: 14px;
+            color: #dfe6e9;
+        }
+
+        .form-control {
+            background-color: rgba(30, 30, 47, 0.9);
+            border: 1px solid #6c5ce7;
+            color: white;
+        }
+
+        .form-control:focus {
+            background-color: rgba(30, 30, 47, 0.9);
+            border-color: #a29bfe;
+            color: white;
+            box-shadow: none;
+        }
+
+        .btn-custom {
+            background-color: #6c5ce7;
+            color: white;
+            border: none;
+            transition: 0.3s ease-in-out;
+        }
+
+        .btn-custom:hover {
+            background-color: #a29bfe;
+        }
+
+        .btn-show-password {
+            background-color: transparent;
+            border: 1px solid #6c5ce7;
+            color: #6c5ce7;
+            transition: 0.3s ease-in-out;
+        }
+
+        .btn-show-password:hover {
+            background-color: #6c5ce7;
+            color: white;
+        }
+
+        .footer {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 12px;
+            color: #dfe6e9;
         }
     </style>
 
@@ -25,7 +101,6 @@
 
     @if ($errors->has('error'))
         <script>
-            // Menampilkan SweetAlert dengan error message
             Swal.fire({
                 icon: 'error',
                 title: 'Oops...',
@@ -34,58 +109,43 @@
         </script>
     @endif
 
-    <div class="login p-5">
-        <div class="row p-4 bg-white shadow-custom pb-5" style="border-radius: 8px 8px 0px 0px">
-            <div class="col-md-6">
-                <div class="icon">
-                    <p class="fw-bold text-center" style="color: #101422">SISTEM MANAJEMEN INFORMASI UKK</p>
-                    <p class="text-center fw-bold">Silahkan Login</p>
-                </div>
-                <div class="form">
-                    <form action="/login" method="post">
-                        @csrf
-                        <div class="email">
-                            <label for="email">Email</label><br>
-                            <input class="form-control mt-2 text-secondary" type="email" name="email" placeholder="Masukan Email" id="email">
-                        </div>
-                        <div class="email pt-4">
-                            <label for="password">Password</label><br>
-                            <div class="input-group">
-                                <input class="form-control mt-2" type="password" name="password" placeholder="Masukan Password" id="password">
-                                <div class="input-group-append">
-                                    <button type="button" class="btn mt-2 rounded-0" style="border:1px solid gray; " onclick="togglePassword()">
-                                        <i id="toggleIcon" class="fa fa-eye"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="submit pt-4 pb-4">
-                            <input class="btn text-white fw-bold" style="width: 150px ; background-color: #A8DCE7" type="submit" value="Login">
-                        </div>
-                    </form>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="kata-kata">
-                    <p class="text-center fs-4 fw-bold" style="color: #A8DCE7">SELAMAT DATANG</p>
-                    <p>Sistem Manajemen Informasi UKK (Ujian Kompetensi Keahlian) adalah sebuah platform yang dirancang untuk mengelola dan memantau pelaksanaan ujian kompetensi di sekolah atau lembaga pendidikan kejuruan.</p>
-                </div>
-            </div>
+    <div class="login-container">
+        <div class="login-header">
+            <h1>SISTEM MANAJEMEN INFORMASI UKK</h1>
+            <p>Silakan login untuk melanjutkan</p>
         </div>
-        <div class="row p-3 shadow-custom" style="background-color: #A8DCE7">
-            <div class="text">
-                <p class="text-white text-center">Copyright by &copyAkasshy2024</p>
+        <form action="/login" method="post">
+            @csrf
+            <div class="mb-4">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" class="form-control" placeholder="Masukkan Email" required>
             </div>
+            <div class="mb-4">
+                <label for="password">Password</label>
+                <div class="input-group">
+                    <input type="password" id="password" name="password" class="form-control" placeholder="Masukkan Password" required>
+                    <button type="button" class="btn btn-show-password" onclick="togglePassword()">
+                        <i id="toggleIcon" class="fa fa-eye"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="d-grid gap-2">
+                <button type="submit" class="btn btn-custom">Login</button>
+            </div>
+        </form>
+        <div class="footer">
+            <p>Copyright by &copy; Akasshy2024</p>
         </div>
     </div>
+
     @if (session('error'))
-    <script>
-        Swal.fire({
-            icon: 'error',
-            title: 'Oops...',
-            text: "{{ session('error') }}",
-        });
-    </script>
+        <script>
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: "{{ session('error') }}",
+            });
+        </script>
     @endif
 
     <script>
@@ -93,7 +153,6 @@
             const passwordInput = document.getElementById("password");
             const toggleIcon = document.getElementById("toggleIcon");
 
-            // Ubah tipe input password menjadi teks dan sebaliknya
             if (passwordInput.type === "password") {
                 passwordInput.type = "text";
                 toggleIcon.classList.remove("fa-eye");
@@ -107,3 +166,4 @@
     </script>
 </body>
 </html>
+ 

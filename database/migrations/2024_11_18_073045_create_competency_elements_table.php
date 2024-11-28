@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('competency_elements', function (Blueprint $table) {
             $table->id();
             $table->string('criteria', 32);
-            $table->foreignId('competency_id')->constrained('competency_standars')->onDelete('cascade');
+            $table->foreignId('competency_id')->constrained('competency_standars')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();
         });
     }

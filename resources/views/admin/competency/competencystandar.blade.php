@@ -80,7 +80,7 @@
                                     <ul class="dropdown-menu" aria-labelledby="actionDropdown{{ $item->id }}">
                                         <!-- Tombol Detail -->
                                         <li>
-                                            <a href="/detail/standar/{{ $item->id }}" class="dropdown-item">
+                                            <a href="/detail/standar/admin/{{ $item->id }}" class="dropdown-item">
                                                 <i class="fa fa-info-circle me-2"></i>Detail
                                             </a>
                                         </li>

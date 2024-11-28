@@ -72,7 +72,7 @@
             processing: true,
             serverSide: true,
             ajax: {
-                url: '/get-report', // Endpoint untuk data hasil
+                url: '/get-reportt', // Endpoint untuk data hasil
                 data: function (d) {
                     d.standar_id = $('#standar-select').val(); // Mengirim standar_id sebagai parameter
                 },

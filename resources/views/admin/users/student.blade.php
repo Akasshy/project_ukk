@@ -69,11 +69,11 @@
                       <td>{{$item->major->major_name}}</td>
                       <td>
                         <div class="form-button-action">
-                            <a href="javascript:void(0)" class="btn btn-link btn-primary btn-lg" onclick="editItem({{ $item->id }})">
+                            <a href="javascript:void(0)" class="btn btn-link btn-primary btn-lg" onclick="editItem({{ $item->user->id }})">
                                 <i class="fa fa-edit"></i>
                             </a>
 
-                            <a href="javascript:void(0)" class="btn btn-link btn-danger" onclick="deleteItem({{ $item->id }})">
+                            <a href="javascript:void(0)" class="btn btn-link btn-danger" onclick="deleteItem({{ $item->user->id }})">
                                 <i class="fa fa-times"></i>
                             </a>
                         </div>

@@ -58,7 +58,7 @@ Route::middleware(['role:admin'])->group(function () {
     Route::get('/admin/standars',[AdminController::class,'standars']);
     Route::get('/vaddst/admin',[AdminController::class,'vaddst']);
     Route::post('/addst/admin',[AdminController::class,'addst']);
-    Route::get('/detail/standar/{id}',[AdminController::class,'detailsStandar']);
+    Route::get('/detail/standar/admin/{id}',[AdminController::class,'detailsStandar']);
     // Route untuk edit competency standard
     Route::get('/veditst/{id}', [AdminController::class, 'edit']);
     Route::post('/updatest/{id}', [AdminController::class, 'update']);
@@ -66,7 +66,7 @@ Route::middleware(['role:admin'])->group(function () {
 
     //laporan
     Route::get('/hasil-ujian', [AdminController::class, 'report']);
-    Route::get('/get-report', [AdminController::class, 'getReport']);
+    Route::get('/get-reportt', [AdminController::class, 'getReport']);
     Route::get('/detail/laporan/admin/{student_id}/{standar_id}',[AdminController::class,'detailLaporan']);
 });
 
@@ -91,8 +91,12 @@ Route::middleware(['role:assessor'])->group(function () {
     Route::get('/vadd/element/{id}',[AssessorController::class,'vaddelement']);
 
     Route::post('/add/element/{competency_id}',[AssessorController::class,'addelement']);
-    Route::post('/update/element/{id}', [AssessorController::class, 'updateElement']);
+    // Route::post('/update/element/{id}', [AssessorController::class, 'updateElement']);
+
+    Route::get('/edit/element/{id}', [AssessorController::class, 'editelement'])->name('edit.element');
+    Route::patch('/element/update/{id}', [AssessorController::class, 'updateElement'])->name('update.element');
     Route::get('/delete/element/{id}', [AssessorController::class, 'deleteele']);
+
 
     // Route::get('/elements',[AssessorController::class,'elements']);
     //PENILAIAN

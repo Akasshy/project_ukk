@@ -27,9 +27,6 @@
                 <div class="card-header">
                     <div class="d-flex align-items-center">
                         <h4 class="card-title me-auto">Element Competency : {{ $name }}</h4>
-                        {{-- <button type="button" class="btn btn-primary ms-auto" data-bs-toggle="modal" data-bs-target="#modalTambah">
-                            Tambah Element
-                        </button> --}}
                         <a href="/vadd/element/{{ $id_st }}" class="btn btn-primary">Tambah</a>
                     </div>
                 </div>
@@ -53,9 +50,12 @@
                                 <td>
                                     <div class="form-button-action">
                                         <!-- Tombol Edit -->
-                                        <button class="btn btn-link btn-primary" data-bs-toggle="modal" data-bs-target="#modalEditElement{{ $item->id }}">
+                                        {{-- <button class="btn btn-link btn-primary" data-bs-toggle="modal" data-bs-target="#modalEditElement{{ $item->id }}">
                                             <i class="fa fa-edit"></i>
-                                        </button>
+                                        </button> --}}
+                                        <a href="/edit/element/{{ $item->id }}" class="btn btn-primary btn-link">
+                                            <i class="fa fa-edit"></i>
+                                        </a>
                                         <!-- Tombol Hapus dengan SweetAlert -->
                                         <button class="btn btn-link btn-danger" onclick="confirmDeleteElement({{ $item->id }})">
                                             <i class="fa fa-times"></i>
@@ -64,7 +64,7 @@
                                 </td>
                             </tr>
                             <!-- Modal Edit -->
-                            <div class="modal fade" id="modalEditElement{{ $item->id }}" tabindex="-1" aria-hidden="true">
+                            {{-- <div class="modal fade" id="modalEditElement{{ $item->id }}" tabindex="-1" aria-hidden="true">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
                                         <div class="modal-header">
@@ -74,7 +74,6 @@
                                         <div class="modal-body">
                                             <form action="/update/element/{{ $item->id }}" method="POST">
                                                 @csrf
-                                                {{-- @method('PUT') --}}
                                                 <input type="hidden" name="competency_id" value="{{ $item->id }}">
                                                 <div class="mb-3">
                                                     <label for="criteria" class="form-label">Criteria</label>
@@ -88,7 +87,7 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </div> --}}
                             @endforeach
                         </tbody>
                     </table>

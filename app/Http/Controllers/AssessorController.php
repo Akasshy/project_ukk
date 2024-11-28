@@ -85,18 +85,28 @@ class AssessorController extends Controller
         return redirect('/standars');
     }
 
-    public function detailsStandar(Request $request,$id)
+    public function detailsStandar(Request $request, $id)
     {
-        $id_st = CompetencyStandar::first()->id;
-        $name = CompetencyStandar::find($id)->unit_title;
-        $standars = CompetencyElement::where('competency_id',$id)->get();
-        return view('assessor.standar.detailstandar', compact('standars','id_st','name'));
+        // Cari data CompetencyStandar berdasarkan ID
+        $competencyStandar = CompetencyStandar::findOrFail($id);
+
+        // Ambil data elemen kompetensi yang sesuai dengan competency_id
+        $standars = CompetencyElement::where('competency_id', $competencyStandar->id)->get();
+
+        // Ambil nama atau unit title untuk ditampilkan
+        $id_st = $competencyStandar->id;
+        $name = $competencyStandar->unit_title;
+
+        // Kirim data ke view
+        return view('assessor.standar.detailstandar', compact('standars', 'id_st', 'name'));
     }
+
 
     public function vaddelement($id){
 
-        // $name = CompetencyStandar::find($id)->unit_title;
-        $competency_id = $id;
+        $competency_id = CompetencyStandar::find($id)->id;
+        // $competency_id = $id;
+
         return view('assessor.standar.addelement',compact('competency_id',));
     }
     public function addelement(Request $request, $competency_id)
@@ -117,6 +127,12 @@ class AssessorController extends Controller
         // Redirect kembali
         return redirect()->back();
     }
+    public function editelement($id)
+    {
+        $element = CompetencyElement::findOrFail($id);
+        $standards = CompetencyStandar::all(); // Ambil semua standar kompetensi
+        return view('assessor.standar.editelement', compact('element', 'standards'));
+    }
 
     public function updateElement(Request $request, $id)
     {
@@ -135,6 +151,7 @@ class AssessorController extends Controller
         // Setelah operasi delete
         return redirect()->back();
     }
+
     public function deleteele($id)
     {
 

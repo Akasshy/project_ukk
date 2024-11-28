@@ -14,10 +14,19 @@ class StudentController extends Controller
     }
     public function report(Request $request)
     {
-        $id = Auth::user()->student->major_id; // Pastikan relasi 'assessor' didefinisikan di model User
-        // Ambil daftar semua standar kompetensi terkait assessor
+        // Ambil ID student dari user yang sedang login
+        $student = Auth::user()->student; // Pastikan relasi 'student' didefinisikan di model User
+
+        if (!$student) {
+            return back()->with('error', 'Data mahasiswa tidak ditemukan.');
+        }
+
+        // Ambil major_id dari student
+        $major_id = $student->major_id;
+
+        // Ambil daftar standar kompetensi terkait major student
         $standars = CompetencyStandar::with('major') // Pastikan relasi 'major' ada di model CompetencyStandar
-            ->where('major_id', $id)
+            ->where('major_id', $major_id)
             ->get();
 
         // Ambil standar_id dari request, atau gunakan default 1 jika kosong
@@ -30,45 +39,50 @@ class StudentController extends Controller
             return back()->with('error', 'Standar kompetensi tidak ditemukan.');
         }
 
-        // Mendapatkan data ujian berdasarkan standar yang dipilih
-        $examinations = Examination::where('standar_id', $standar_id)->with('student.user')->get();
+        // Mendapatkan data ujian untuk student yang sedang login
+        $examinations = Examination::where('standar_id', $standar_id)
+            ->where('student_id', $student->id) // Filter berdasarkan ID student yang login
+            ->with('student.user')
+            ->get();
 
-        // Kelompokkan berdasarkan student_id
-        $students = $examinations->groupBy('student_id')->map(function ($exams) use ($standard, $standar_id) { // Tambahkan $standar_id di sini
-            $totalElements = $standard->competency_elements->count();
-            $completedElements = $exams->where('status', 1)->unique('element_id')->count();
+        // Hitung skor berdasarkan data ujian
+        $totalElements = $standard->competency_elements->count();
+        $completedElements = $examinations->where('status', 1)->unique('element_id')->count();
+        $finalScore = $totalElements > 0 ? round(($completedElements / $totalElements) * 100) : 0;
 
-            $finalScore = $totalElements > 0 ? round(($completedElements / $totalElements) * 100) : 0;
+        if ($finalScore >= 91) {
+            $status = "Sangat Kompeten";
+        } elseif ($finalScore >= 75 && $finalScore <= 90) {
+            $status = "Kompeten";
+        } elseif ($finalScore >= 61 && $finalScore <= 74) {
+            $status = "Cukup Kompeten";
+        } else {
+            $status = "Belum Kompeten";
+        }
 
-            if ($finalScore >= 91) {
-                $status = "Sangat Kompeten";
-            } elseif ($finalScore >= 75 && $finalScore <= 90) {
-                $status = "Kompeten";
-            } elseif ($finalScore >= 61 && $finalScore <= 74) {
-                $status = "Cukup Kompeten";
-            } else {
-                $status = "Belum Kompeten";
-            }
-
-            return [
-                'student_id' => $exams->first()->student_id,
-                'student_name' => $exams->first()->student->user->full_name,
-                'final_score' => $finalScore,
-                'status' => $status,
-                'action' => '',
-                'standar_id' => $standar_id, // Tambahkan standar_id di sini
-            ];
-        });
-
-
+        // Struktur data untuk view
+        $studentReport = [
+            'student_id' => $student->id,
+            'student_name' => $student->user->full_name,
+            'final_score' => $finalScore,
+            'status' => $status,
+        ];
 
         // Mengirim data ke view
-        return view('student.hasilujianst', compact('standard', 'students', 'standars','standar_id'));
+        return view('student.hasilujianst', compact('standard', 'studentReport', 'standars', 'standar_id'));
     }
+
 
     public function getReport(Request $request)
     {
+        // Ambil ID standar kompetensi dari request
         $standar_id = $request->input('standar_id');
+
+        // Ambil student ID dari user yang login
+        $student = Auth::user()->student; // Pastikan relasi 'student' didefinisikan di model User
+        if (!$student) {
+            return response()->json(['error' => 'Data mahasiswa tidak ditemukan.'], 404);
+        }
 
         // Validasi apakah standar kompetensi ada
         $standard = CompetencyStandar::where('id', $standar_id)->with('competency_elements')->first();
@@ -76,47 +90,41 @@ class StudentController extends Controller
             return response()->json(['error' => 'Standar kompetensi tidak ditemukan.'], 404);
         }
 
-        // Ambil data ujian berdasarkan standar_id
-        $examinations = Examination::where('standar_id', $standar_id)->with('student.user')->get();
+        // Ambil data ujian untuk student login berdasarkan standar_id
+        $examinations = Examination::where('standar_id', $standar_id)
+            ->where('student_id', $student->id) // Filter berdasarkan student login
+            ->get();
 
-        // Proses data siswa
-        $students = $examinations->groupBy('student_id')->map(function ($exams) use ($standard, $standar_id) { // Tambahkan $standar_id di sini
-            $totalElements = $standard->competency_elements->count();
-            $completedElements = $exams->where('status', 1)->unique('element_id')->count();
+        // Hitung skor berdasarkan data ujian
+        $totalElements = $standard->competency_elements->count();
+        $completedElements = $examinations->where('status', 1)->unique('element_id')->count();
+        $finalScore = $totalElements > 0 ? round(($completedElements / $totalElements) * 100) : 0;
 
-            $finalScore = $totalElements > 0 ? round(($completedElements / $totalElements) * 100) : 0;
+        // Tentukan status kompetensi
+        if ($finalScore >= 91) {
+            $status = "Sangat Kompeten";
+        } elseif ($finalScore >= 75 && $finalScore <= 90) {
+            $status = "Kompeten";
+        } elseif ($finalScore >= 61 && $finalScore <= 74) {
+            $status = "Cukup Kompeten";
+        } else {
+            $status = "Belum Kompeten";
+        }
 
-            if ($finalScore >= 91) {
-                $status = "Sangat Kompeten";
-            } elseif ($finalScore >= 75 && $finalScore <= 90) {
-                $status = "Kompeten";
-            } elseif ($finalScore >= 61 && $finalScore <= 74) {
-                $status = "Cukup Kompeten";
-            } else {
-                $status = "Belum Kompeten";
-            }
-
-            return [
-                'student_id' => $exams->first()->student_id,
-                'student_name' => $exams->first()->student->user->full_name,
-                'final_score' => $finalScore,
-                'status' => $status,
-                'action' => '',
-                'standar_id' => $standar_id, // Tambahkan standar_id di sini
-            ];
-        });
-
-
-        // Konversi ke array dan tambahkan indeks
-        $studentsArray = $students->values()->map(function ($student, $index) {
-            return array_merge(['DT_RowIndex' => $index + 1], $student);
-        });
+        // Struktur data untuk response
+        $studentReport = [
+            'student_id' => $student->id,
+            'student_name' => $student->user->full_name,
+            'final_score' => $finalScore,
+            'status' => $status,
+        ];
 
         // Respons ke DataTables
         return response()->json([
-            'data' => $studentsArray,
+            'data' => [$studentReport], // Data dijadikan array untuk konsistensi
         ]);
     }
+
     public function detailLaporan($student_id, $standar_id)
     {
         $details = Examination::with(['student.user', 'standar', 'elements'])
@@ -131,50 +139,60 @@ class StudentController extends Controller
         return view('student.detailhasil', compact('details'));
     }
     public function generatePDF(Request $request)
-{
-    $standar_id = $request->input('standar_id');
+    {
+        $standar_id = $request->input('standar_id');
+        $logged_in_student_id = Auth::user()->student->id; // Ambil ID siswa dari user yang login
 
-    // Validasi apakah standar kompetensi ada
-    $standard = CompetencyStandar::where('id', $standar_id)->with('competency_elements')->first();
-    if (!$standard) {
-        return redirect()->back()->with('error', 'Standar kompetensi tidak ditemukan.');
-    }
+        // Validasi apakah standar kompetensi ada
+        $standard = CompetencyStandar::where('id', $standar_id)->with('competency_elements')->first();
+        if (!$standard) {
+            return redirect()->back()->with('error', 'Standar kompetensi tidak ditemukan.');
+        }
 
-    // Ambil data ujian berdasarkan standar_id
-    $examinations = Examination::where('standar_id', $standar_id)->with(['student.user', 'elements'])->get();
+        // Ambil data ujian berdasarkan standar_id dan ID siswa yang login
+        $examinations = Examination::where('standar_id', $standar_id)
+            ->where('student_id', $logged_in_student_id)
+            ->with(['student.user', 'elements'])
+            ->get();
 
-    // Proses data siswa
-    $students = $examinations->groupBy('student_id')->map(function ($exams) use ($standard) {
-        $totalElements = $standard->competency_elements->count();
-        $completedElements = $exams->where('status', 1)->unique('element_id')->count();
+        // Jika data kosong
+        if ($examinations->isEmpty()) {
+            return redirect()->back()->with('error', 'Tidak ada data hasil ujian untuk siswa yang sedang login.');
+        }
 
-        $finalScore = $totalElements > 0 ? round(($completedElements / $totalElements) * 100) : 0;
+        // Proses data siswa
+        $students = $examinations->groupBy('student_id')->map(function ($exams) use ($standard) {
+            $totalElements = $standard->competency_elements->count();
+            $completedElements = $exams->where('status', 1)->unique('element_id')->count();
 
-        $status = match (true) {
-            $finalScore >= 91 => "Sangat Kompeten",
-            $finalScore >= 75 && $finalScore <= 90 => "Kompeten",
-            $finalScore >= 61 && $finalScore <= 74 => "Cukup Kompeten",
-            default => "Belum Kompeten",
-        };
+            $finalScore = $totalElements > 0 ? round(($completedElements / $totalElements) * 100) : 0;
 
-        $examElements = $exams->map(function ($exam) {
+            $status = match (true) {
+                $finalScore >= 91 => "Sangat Kompeten",
+                $finalScore >= 75 && $finalScore <= 90 => "Kompeten",
+                $finalScore >= 61 && $finalScore <= 74 => "Cukup Kompeten",
+                default => "Belum Kompeten",
+            };
+
+            $examElements = $exams->map(function ($exam) {
+                return [
+                    'criteria' => $exam->element->criteria,
+                    'status' => $exam->status == 1 ? 'Kompeten' : 'Belum Kompeten',
+                ];
+            });
+
             return [
-                'criteria' => $exam->element->criteria,
-                'status' => $exam->status == 1 ? 'Kompeten' : 'Belum Kompeten',
+                'student_name' => $exams->first()->student->user->full_name,
+                'final_score' => $finalScore,
+                'status' => $status,
+                'elements' => $examElements,
             ];
         });
 
-        return [
-            'student_name' => $exams->first()->student->user->full_name,
-            'final_score' => $finalScore,
-            'status' => $status,
-            'elements' => $examElements,
-        ];
-    });
-
-    $pdf = Pdf::loadView('student/sertificate', ['students' => $students, 'standard' => $standard]);
-    return $pdf->stream('HasilUjian.pdf');
-}
+        // Generate PDF
+        $pdf = Pdf::loadView('student/sertificate', ['students' => $students, 'standard' => $standard]);
+        return $pdf->stream('HasilUjian.pdf');
+    }
 
 
 }

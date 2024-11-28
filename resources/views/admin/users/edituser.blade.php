@@ -50,7 +50,7 @@
             </div>
             <div class="mb-3">
                 <label for="role" class="form-label">Role</label>
-                <select class="form-select" id="role" name="role" required >
+                <select class="form-select" id="role" name="role"  required >
                     <option value="admin" {{ $user->role === 'admin' ? 'selected' : '' }}>Admin</option>
                     <option value="student" {{ $user->role === 'student' ? 'selected' : '' }}>Student</option>
                     <option value="assessor" {{ $user->role === 'assessor' ? 'selected' : '' }}>Assessor</option>

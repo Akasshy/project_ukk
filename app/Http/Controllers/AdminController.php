@@ -89,7 +89,7 @@ class AdminController extends Controller
 
     public function deleteuser(Request $request){
         User::where('id', $request->id)->delete();
-        return redirect('/users')->with('success',);
+        return redirect('/users')->with('success',)->with('success', 'Delete User Berhasil!');
     }
 
     public function editUser($id)
@@ -110,7 +110,7 @@ class AdminController extends Controller
             'email' => 'required|email|max:255|unique:users,email,' . $id,
             'phone_number' => 'required|string|max:20',
             'password' => 'nullable|string|min:8|confirmed', // Password optional
-            'role' => 'required|in:admin,student,assessor',
+            // 'role' => 'required|in:admin,student,assessor',
             'nisn' => 'nullable|string|max:20', // Untuk student
             'grade_level' => 'nullable|in:10,11,12',
             'major_id' => 'nullable|exists:majors,id',
@@ -176,7 +176,7 @@ class AdminController extends Controller
 
     public function deletemj(Request $request){
         Major::where('id',$request->id)->delete();
-        return redirect('/majors')->with('success','');
+        return redirect('/majors')->with('success','')->with('success', 'Delete Major Berhasil!');
     }
 
     public function edit($id)
@@ -276,69 +276,76 @@ class AdminController extends Controller
 
     public function detailsStandar(Request $request,$id)
     {
+        $competencyStandar = CompetencyStandar::findOrFail($id);
 
-        $standars = CompetencyElement::where('competency_id',$id)->get();
-        return view('assessor.standar.detailstandar', compact('standars'));
+        // Ambil data elemen kompetensi yang sesuai dengan competency_id
+        $standars = CompetencyElement::where('competency_id', $competencyStandar->id)->get();
+
+        // Ambil nama atau unit title untuk ditampilkan
+        $id_st = $competencyStandar->id;
+        $name = $competencyStandar->unit_title;
+
+        // Kirim data ke view
+        return view('admin.competency.detailcompetency', compact('standars', 'id_st', 'name'));
     }
-    public function elements(Request $request)
-    {
-        $id = Auth::user()->assessor->id;
+    // public function elements(Request $request)
+    // {
+    //     $id = Auth::user()->assessor->id;
 
-        $standars = CompetencyStandar::with('elements')
-            ->where('assessor_id', $id)
-            ->get();
+    //     $standars = CompetencyStandar::with('elements')
+    //         ->where('assessor_id', $id)
+    //         ->get();
 
-        return view('assessor.element.elementskom', compact('standars'));
-    }
+    //     return view('assessor.element.elementskom', compact('standars'));
+    // }
 
-    public function addelement(Request $request)
-    {
-        $request->validate([
-            'criteria' => 'required|string|max:255',
-            'competency_id' => 'required|exists:competency_standars,id',
-        ]);
+    // public function addelement(Request $request)
+    // {
+    //     $request->validate([
+    //         'criteria' => 'required|string|max:255',
+    //         'competency_id' => 'required|exists:competency_standars,id',
+    //     ]);
 
-        // Simpan elemen baru
-        CompetencyElement::create([
-            'criteria' => $request->criteria,
-            'competency_id' => $request->competency_id,
-        ]);
-        session()->flash('success', 'Elemen berhasil di tambahkan');
-        // dd($request->all());
-        return redirect()->back();
-    }
-    public function updateElement(Request $request, $id)
-    {
-        $request->validate([
-            'criteria' => 'required|string|max:255',
-            'competency_id' => 'required|exists:competency_standars,id',
-        ]);
+    //     // Simpan elemen baru
+    //     CompetencyElement::create([
+    //         'criteria' => $request->criteria,
+    //         'competency_id' => $request->competency_id,
+    //     ]);
+    //     session()->flash('success', 'Elemen berhasil di tambahkan');
+    //     // dd($request->all());
+    //     return redirect()->back();
+    // }
+    // public function updateElement(Request $request, $id)
+    // {
+    //     $request->validate([
+    //         'criteria' => 'required|string|max:255',
+    //         'competency_id' => 'required|exists:competency_standars,id',
+    //     ]);
 
-        $element = CompetencyElement::findOrFail($id);
-        $element->update([
-            'criteria' => $request->criteria,
-            'competency_id' => $request->competency_id,
-        ]);
+    //     $element = CompetencyElement::findOrFail($id);
+    //     $element->update([
+    //         'criteria' => $request->criteria,
+    //         'competency_id' => $request->competency_id,
+    //     ]);
 
-        session()->flash('success', 'Elemen berhasil diperbarui!');
-        // Setelah operasi delete
-        return redirect()->back();
-    }
-    public function deleteele($id)
-    {
+    //     session()->flash('success', 'Elemen berhasil diperbarui!');
+    //     // Setelah operasi delete
+    //     return redirect()->back();
+    // }
+    // public function deleteele($id)
+    // {
 
-        $element = CompetencyElement::findOrFail($id);
-        $element->delete();
+    //     $element = CompetencyElement::findOrFail($id);
+    //     $element->delete();
 
-        return redirect()->back()->with('success', 'Element deleted successfully.');
+    //     return redirect()->back()->with('success', 'Element deleted successfully.');
 
-    }
+    // }
     public function report(Request $request)
     {
         // $id = Auth::user()->assessor->id; // Pastikan relasi 'assessor' didefinisikan di model User
         // Ambil daftar semua standar kompetensi terkait assessor
-        $standars = CompetencyStandar::with('major') // Pastikan relasi 'major' ada di model CompetencyStandar
-            ->get();
+        $standars = CompetencyStandar::with('major')->get(); // Pastikan relasi 'major' ada di model CompetencyStandar
 
         // Ambil standar_id dari request, atau gunakan default 1 jika kosong
         $standar_id = $request->input('standar_id', 1); // Default ke 1 jika tidak ada input
